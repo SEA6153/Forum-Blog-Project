@@ -33,8 +33,15 @@ public class SeedData implements CommandLineRunner {
             post2.setExplanation("Explanation of post2");
             post2.setCategory("Category of post2");
 
+            Post post3 = new Post();
+            post3.setCategory("Category of post3");
+            post3.setExplanation("Explanation of post3");
+            post3.setTitle("Title of post3");
+
             postService.save(post1);
             postService.save(post2);
+            postService.save(post3);
+
 
         }
 

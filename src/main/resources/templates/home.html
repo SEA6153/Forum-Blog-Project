@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BLOG :: Home</title>
+</head>
+<body>
+    <div class="container">
+        <h1>MY BLOG APP FORUM</h1>
+        <hr />
+        <div class="posts-container">
+            <div class="post" th:each="post : ${posts}">
+                <h2><a th:href="@{'/posts' + ${post.id}}"
+                th:text="${post.title}">Title</a>
+                </h2>
+                <h3 th:text="'Category of the title is ' + ${post.category}"></h3>
+                <h5 th:text="'Published on ' + ${post.createdAt}">Created at
+                </h5>
+                <p th:text="${post.explanation}">--------Explanation of post------</p>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
