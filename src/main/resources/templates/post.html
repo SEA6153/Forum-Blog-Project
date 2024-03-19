@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BLOG :: POST</title>
+</head>
+<body>
+        <div class="container">
+            <a th:href="@{'/'}">HOME</a>
+                    <div class="post">
+                        <h2 th:text="${post.title}">TITLE</h2>
+                        <h3 th:text="'Written by ' + ${post.userAccount.nickname}">Written by</h3>
+                        <h3 th:text="${post.category}">Category is </h3>
+                        <h5 th:text="'Created on ' + ${post.createdAt}">Created at</h5>
+                        <p th:text="${post.explanation}">Post Explanation</p>
+                    </div>
+                </div>
+</body>
+<style>body{
+    background-color: black;
+}
+.post{
+    color: white;
+    text-align: center;
+}
+
+</style>
+</html>

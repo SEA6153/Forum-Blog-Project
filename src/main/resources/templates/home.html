@@ -7,14 +7,19 @@
     <title>BLOG :: Home</title>
 </head>
 <body>
+<div>
+    <a th:href="@{/posts/new}" class="newPostLink">Create a new Post</a>
+</div>
+
     <div class="container">
         <h1>MY BLOG APP FORUM</h1>
         <hr />
         <div class="posts-container">
             <div class="post" th:each="post : ${posts}">
-                <h2><a th:href="@{'/posts' + ${post.id}}"
+                <h2 class="post-title"><a th:href="@{'/posts/' + ${post.id}}"
                 th:text="${post.title}">Title</a>
                 </h2>
+                <h5 th:text="'Written by ' + ${post.userAccount.nickname}">Nickname</h5>
                 <h3 th:text="'Category of the title is ' + ${post.category}"></h3>
                 <h5 th:text="'Published on ' + ${post.createdAt}">Created at
                 </h5>
@@ -23,7 +28,41 @@
             </div>
 
         </div>
-    </div>
+        <hr/>
+        <ul>
 
+            <li> <a th:href="@{/register}">Register</a></li>
+            <li> <a th:href="@{/login}">Login</a></li>
+
+        </ul>
+    </div>
 </body>
+<style>
+
+
+
+    body{
+    background-color: black;
+}
+.posts-container{
+    color: white;
+    text-align: center;
+}
+.post-title{
+    font-family: "Times New Roman",serif;
+    font-size: 50px;
+    text-decoration: none;
+}
+
+.newPostLink{
+    color: red;
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: right;
+}
+
+
+
+
+</style>
 </html>

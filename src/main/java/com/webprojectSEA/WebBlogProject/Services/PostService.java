@@ -18,9 +18,11 @@ import java.util.Optional;
 @Service
 public class PostService {
 
+    private final PostRepository postRepository;
 
-    @Autowired
-    private PostRepository postRepository;
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
 
     public Optional<Post> getById(Long id){
         return postRepository.findById(id);

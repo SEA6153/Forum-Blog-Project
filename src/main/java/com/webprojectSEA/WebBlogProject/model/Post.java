@@ -4,8 +4,10 @@
 package com.webprojectSEA.WebBlogProject.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.catalina.User;
 
 import java.time.LocalDateTime;
 
@@ -19,17 +21,21 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "Category", nullable = false)
-    private String category;
+    private Category category;
 
-    @Column(name = "Title", nullable = false)
+
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String explanation;
 
-    @Column(name = "CreatedAt")
+
     private LocalDateTime createdAt;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_account_id" ,referencedColumnName = "id", nullable = false)
+    private UserAccount userAccount;
 
 
 }
