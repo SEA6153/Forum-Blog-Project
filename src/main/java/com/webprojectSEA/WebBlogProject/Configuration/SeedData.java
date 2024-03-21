@@ -3,25 +3,34 @@
 
 package com.webprojectSEA.WebBlogProject.Configuration;
 
+import com.webprojectSEA.WebBlogProject.Repostories.UserAuthorityRepository;
 import com.webprojectSEA.WebBlogProject.Services.PostService;
 import com.webprojectSEA.WebBlogProject.Services.UserAccountService;
-import com.webprojectSEA.WebBlogProject.model.Category;
-import com.webprojectSEA.WebBlogProject.model.Post;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
+import com.webprojectSEA.WebBlogProject.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class SeedData implements CommandLineRunner {
+    private Roles roles;
 
     private final PostService postService;
     private final UserAccountService accountService;
-    public SeedData(PostService postService, UserAccountService accountService) {
+
+    @Autowired
+    private final UserAuthorityRepository userAuthorityRepository;
+
+
+
+    public SeedData(PostService postService, UserAccountService accountService, UserAuthorityRepository userAuthorityRepository) {
         this.postService = postService;
         this.accountService = accountService;
+        this.userAuthorityRepository = userAuthorityRepository;
     }
 
 
@@ -33,31 +42,55 @@ public class SeedData implements CommandLineRunner {
     public void run(String... args) throws Exception{
         List<Post> posts = postService.getAll();
 
+
         if(posts.isEmpty()){
+
+
+
+
+            Authority user = new Authority();
+            user.setName("ROLE_USER");
+            userAuthorityRepository.save(user);
+
+            Authority admin = new Authority();
+            admin.setName("ROLE_ADMIN");
+            userAuthorityRepository.save(admin);
+
+
+
 
             UserAccount account1 = new UserAccount();
             UserAccount account2 = new UserAccount();
             UserAccount account3 = new UserAccount();
 
 
-            account1.setFirstName("Samet1 Ege1");
+            account1.setFirstName("Samet1");
             account1.setLastName("AŞIK1");
             account1.setEmail("sametrize1@hotmail.com");
             account1.setPassword("61536153");
             account1.setNickname("SEA6153-1");
+            Set<Authority> authorities1 = new HashSet<>();
+            userAuthorityRepository.findById("ROLE_USER").ifPresent(authorities1::add);
+            account1.setAuthoritySet(authorities1);
 
-            account2.setFirstName("Samet2 Ege2");
+            account2.setFirstName("Samet2");
             account2.setLastName("AŞIK2");
             account2.setEmail("sametrize2@hotmail.com");
             account2.setPassword("61536153-2");
             account2.setNickname("SEA6153-2");
+            Set<Authority> authorities2 = new HashSet<>();
+            userAuthorityRepository.findById("ROLE_USER").ifPresent(authorities2::add);
+            account2.setAuthoritySet(authorities2);
 
 
-            account3.setFirstName("Samet3 Ege3");
+            account3.setFirstName("Samet3");
             account3.setLastName("AŞIK3");
             account3.setEmail("sametrize3@hotmail.com");
             account3.setPassword("61536153-3");
             account3.setNickname("SEA6153-3");
+            Set<Authority> authorities3 = new HashSet<>();
+            userAuthorityRepository.findById("ROLE_ADMIN").ifPresent(authorities3::add);
+            account3.setAuthoritySet(authorities3);
 
 
 

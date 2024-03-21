@@ -2,6 +2,7 @@ package com.webprojectSEA.WebBlogProject.Controller;
 
 import com.webprojectSEA.WebBlogProject.Services.PostService;
 import com.webprojectSEA.WebBlogProject.Services.UserAccountService;
+import com.webprojectSEA.WebBlogProject.model.Category;
 import com.webprojectSEA.WebBlogProject.model.Post;
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class PostController {
     }
 
     @PostMapping("/posts/new")
-    public String saveNewPost(@ModelAttribute Post post){
+    public String saveNewPost(@ModelAttribute Post post) {
         postService.save(post);
         return "redirect:/posts/" + post.getId();
     }

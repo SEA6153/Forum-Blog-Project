@@ -26,9 +26,9 @@
             </div>
             <div>
                 <label for="category">Category</label>
-                <select id="category" name="category" th:field="*{category}">
-                    <option th:each="category : ${T(com.webprojectSEA.WebBlogProject.model.Category).values()}"
-                            th:value="${category}" th:text="${category.getCategoryNames()}"></option>
+                <select id="category" name="category"  th:field="*{category}">
+                    <option value="" th:each=" category : ${T(com.webprojectSEA.WebBlogProject.model.Category).values()}"
+                            th:value="${category}" th:text="${category.getCategoryNames()}" ></option>
                 </select>
             </div>
             <button type="submit">Create a new Post</button>

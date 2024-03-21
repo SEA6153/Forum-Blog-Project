@@ -3,12 +3,11 @@
 
 package com.webprojectSEA.WebBlogProject.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.catalina.User;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,7 +33,7 @@ public class Post {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_account_id" ,referencedColumnName = "id", nullable = false)
+    @JoinColumn(nullable = false)
     private UserAccount userAccount;
 
 
