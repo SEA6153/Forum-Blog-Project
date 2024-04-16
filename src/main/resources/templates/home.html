@@ -39,7 +39,7 @@
                       th:action="@{/logout}"
                       method="post">
                     <div class="form-group">
-                    <label>Hi, <span sec:authentication="name">Username</span></label>
+                    <label class="hiLabel">Hi, <span sec:authentication="name">Username</span></label>
                 </div>
                    <button type="submit">Logout</button>
                 </form>
@@ -71,7 +71,9 @@
     text-align: right;
 }
 
-
+.hiLabel{
+    color: white;
+}
 
 
 </style>

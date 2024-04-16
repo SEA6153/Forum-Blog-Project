@@ -4,8 +4,8 @@
 package com.webprojectSEA.WebBlogProject.Configuration;
 
 import com.webprojectSEA.WebBlogProject.Repostories.UserAuthorityRepository;
-import com.webprojectSEA.WebBlogProject.Services.PostService;
-import com.webprojectSEA.WebBlogProject.Services.UserAccountService;
+import com.webprojectSEA.WebBlogProject.Services.PostServiceImpl;
+import com.webprojectSEA.WebBlogProject.Services.UserAccountServiceImpl;
 import com.webprojectSEA.WebBlogProject.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,16 +19,16 @@ import java.util.Set;
 public class SeedData implements CommandLineRunner {
     private Roles roles;
 
-    private final PostService postService;
-    private final UserAccountService accountService;
+    private final PostServiceImpl postServiceImpl;
+    private final UserAccountServiceImpl accountService;
 
     @Autowired
     private final UserAuthorityRepository userAuthorityRepository;
 
 
 
-    public SeedData(PostService postService, UserAccountService accountService, UserAuthorityRepository userAuthorityRepository) {
-        this.postService = postService;
+    public SeedData(PostServiceImpl postServiceImpl, UserAccountServiceImpl accountService, UserAuthorityRepository userAuthorityRepository) {
+        this.postServiceImpl = postServiceImpl;
         this.accountService = accountService;
         this.userAuthorityRepository = userAuthorityRepository;
     }
@@ -40,20 +40,18 @@ public class SeedData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception{
-        List<Post> posts = postService.getAll();
+        List<Post> posts = postServiceImpl.getAll();
 
 
         if(posts.isEmpty()){
 
 
-
-
             Authority user = new Authority();
-            user.setName("ROLE_USER");
+            user.setName("USER");
             userAuthorityRepository.save(user);
 
             Authority admin = new Authority();
-            admin.setName("ROLE_ADMIN");
+            admin.setName("ADMIN");
             userAuthorityRepository.save(admin);
 
 
@@ -69,8 +67,9 @@ public class SeedData implements CommandLineRunner {
             account1.setEmail("sametrize1@hotmail.com");
             account1.setPassword("61536153");
             account1.setNickname("SEA6153-1");
+            account1.setActive(true);
             Set<Authority> authorities1 = new HashSet<>();
-            userAuthorityRepository.findById("ROLE_USER").ifPresent(authorities1::add);
+            userAuthorityRepository.findById("USER").ifPresent(authorities1::add);
             account1.setAuthoritySet(authorities1);
 
             account2.setFirstName("Samet2");
@@ -78,8 +77,9 @@ public class SeedData implements CommandLineRunner {
             account2.setEmail("sametrize2@hotmail.com");
             account2.setPassword("61536153-2");
             account2.setNickname("SEA6153-2");
+            account1.setActive(true);
             Set<Authority> authorities2 = new HashSet<>();
-            userAuthorityRepository.findById("ROLE_USER").ifPresent(authorities2::add);
+            userAuthorityRepository.findById("USER").ifPresent(authorities2::add);
             account2.setAuthoritySet(authorities2);
 
 
@@ -88,8 +88,9 @@ public class SeedData implements CommandLineRunner {
             account3.setEmail("sametrize3@hotmail.com");
             account3.setPassword("61536153-3");
             account3.setNickname("SEA6153-3");
+            account1.setActive(false);
             Set<Authority> authorities3 = new HashSet<>();
-            userAuthorityRepository.findById("ROLE_ADMIN").ifPresent(authorities3::add);
+            userAuthorityRepository.findById("ADMIN").ifPresent(authorities3::add);
             account3.setAuthoritySet(authorities3);
 
 
@@ -118,19 +119,9 @@ public class SeedData implements CommandLineRunner {
             post3.setTitle("Title of post3");
             post3.setUserAccount(account3);
 
-            postService.save(post1);
-            postService.save(post2);
-            postService.save(post3);
-
-
-
-
-
-
-
-
-
-
+            postServiceImpl.save(post1);
+            postServiceImpl.save(post2);
+            postServiceImpl.save(post3);
 
         }
 

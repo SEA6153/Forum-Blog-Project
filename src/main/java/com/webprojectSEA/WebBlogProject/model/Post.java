@@ -31,10 +31,22 @@ public class Post {
 
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
     @NotNull
     @ManyToOne
     @JoinColumn(nullable = false)
     private UserAccount userAccount;
 
-
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", category= '" +  category +"'" +
+                ", title= '" + title + "'" +
+                ", explanation= '" + explanation + "'" +
+                ", createdAt= '" + createdAt + "'" +
+                ", updatedAt= '" + updatedAt + "'" +
+                '}';
+    }
 }

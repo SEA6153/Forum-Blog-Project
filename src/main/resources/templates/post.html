@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
@@ -16,6 +16,12 @@
                         <h5 th:text="'Created on ' + ${post.createdAt}">Created at</h5>
                         <p th:text="${post.explanation}">Post Explanation</p>
                     </div>
+            <ul sec:authorize="isAuthenticated()">
+                <li><a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a></li>
+            </ul>
+            <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="post">
+                <button type="submit">Delete</button>
+            </form>
                 </div>
 </body>
 <style>body{

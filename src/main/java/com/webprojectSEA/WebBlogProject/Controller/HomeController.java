@@ -1,6 +1,6 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
-import com.webprojectSEA.WebBlogProject.Services.PostService;
+import com.webprojectSEA.WebBlogProject.Services.PostServiceImpl;
 import com.webprojectSEA.WebBlogProject.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,15 +13,15 @@ import java.util.List;
 public class HomeController {
 
     @Autowired
-    private PostService postService;
+    private PostServiceImpl postServiceImpl;
 
-    public HomeController(PostService postService){
-        this.postService = postService;
+    public HomeController(PostServiceImpl postServiceImpl){
+        this.postServiceImpl = postServiceImpl;
     }
 
     @GetMapping("/")
     public String home(Model model){
-        List<Post> posts = postService.getAll();
+        List<Post> posts = postServiceImpl.getAll();
         model.addAttribute("posts", posts);
         return "home";
     }

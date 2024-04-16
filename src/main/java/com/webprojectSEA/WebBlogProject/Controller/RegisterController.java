@@ -1,6 +1,6 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
-import com.webprojectSEA.WebBlogProject.Services.UserAccountService;
+import com.webprojectSEA.WebBlogProject.Services.UserAccountServiceImpl;
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class RegisterController {
 
-    private final UserAccountService userAccountService;
+    private final UserAccountServiceImpl userAccountServiceImpl;
 
-    public RegisterController(UserAccountService userAccountService) {
-        this.userAccountService = userAccountService;
+    public RegisterController(UserAccountServiceImpl userAccountServiceImpl) {
+        this.userAccountServiceImpl = userAccountServiceImpl;
     }
 
     @GetMapping("/register")
@@ -26,7 +26,7 @@ public class RegisterController {
 
     @PostMapping("/register")
     public String registerNewUser(@ModelAttribute UserAccount userAccount){
-        userAccountService.save(userAccount);
+        userAccountServiceImpl.save(userAccount);
         return "redirect:/";
     }
 
