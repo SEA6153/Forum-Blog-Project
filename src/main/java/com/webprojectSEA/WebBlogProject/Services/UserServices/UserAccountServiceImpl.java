@@ -1,10 +1,11 @@
-package com.webprojectSEA.WebBlogProject.Services;
+package com.webprojectSEA.WebBlogProject.Services.UserServices;
 
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAuthorityRepository;
 import com.webprojectSEA.WebBlogProject.model.Authority;
 import com.webprojectSEA.WebBlogProject.model.Roles;
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,30 +14,29 @@ import java.util.*;
 @Service
 public class UserAccountServiceImpl implements UserAccountService{
 
-    private Roles roles;
-    private final PasswordEncoder passwordEncoder;
-    private final UserAccountRepository accountRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private  UserAccountRepository accountRepository;
     private  final UserAuthorityRepository authorityRepository;
 
-    private static final long lock_duration_time = 30000;
+    public static final long LOCK_DURATION_TIME = 30000;
+    public static final long ATTEMPT_TIME = 3;
 
     // Constructor Injection
-    public UserAccountServiceImpl(PasswordEncoder passwordEncoder, UserAccountRepository accountRepository, UserAuthorityRepository authorityRepository) {
-        this.passwordEncoder = passwordEncoder;
-        this.accountRepository = accountRepository;
+    public UserAccountServiceImpl(UserAuthorityRepository authorityRepository) {
         this.authorityRepository = authorityRepository;
     }
 
     @Override
     public UserAccount save(UserAccount userAccount) {
-
         userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
 
 
         Authority userAuthority = authorityRepository.findByName("USER");
         if (userAuthority == null) {
             userAuthority = new Authority();
-            userAuthority.setName(Roles.USER.toString());
+            userAuthority.setName(Roles.ROLE_USER.toString());
             userAuthority = authorityRepository.save(userAuthority);
         }
         Set<Authority> authorities = new HashSet<>();
@@ -44,7 +44,7 @@ public class UserAccountServiceImpl implements UserAccountService{
         userAccount.setAuthoritySet(authorities);
 
 
-        userAccount.setActive(true);
+        userAccount.setEnabled(true);
 
         return accountRepository.save(userAccount);
     }
@@ -54,7 +54,7 @@ public class UserAccountServiceImpl implements UserAccountService{
         Optional<UserAccount> optionalUserAccount = accountRepository.findByNickname(username);
         if (optionalUserAccount.isPresent()) {
             UserAccount userAccount = optionalUserAccount.get();
-            userAccount.setActive(false);
+            userAccount.setEnabled(false);
             accountRepository.save(userAccount);
         } else {
             throw new RuntimeException("User not found with username: " + username);
@@ -93,7 +93,7 @@ public class UserAccountServiceImpl implements UserAccountService{
     public boolean unlockAccountTimeExpired(UserAccount userAccount) {
         long lockTimeInMills = userAccount.getLockTime().getTime();
         long currentTimeMillis = System.currentTimeMillis();
-        if(lockTimeInMills + lock_duration_time < currentTimeMillis){
+        if(lockTimeInMills + LOCK_DURATION_TIME < currentTimeMillis){
             userAccount.setAccountNonLocked(true);
             userAccount.setLockTime(null);
             userAccount.setFailedAttempt(0);

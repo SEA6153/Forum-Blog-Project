@@ -1,4 +1,4 @@
-package com.webprojectSEA.WebBlogProject.Services;
+package com.webprojectSEA.WebBlogProject.Services.LoginServices;
 
 public interface LoginAttemptService {
 

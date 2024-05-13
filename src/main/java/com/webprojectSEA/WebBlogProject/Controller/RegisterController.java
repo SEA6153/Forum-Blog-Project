@@ -1,6 +1,6 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
-import com.webprojectSEA.WebBlogProject.Services.UserAccountServiceImpl;
+import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountServiceImpl;
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,12 +1,12 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
-import com.webprojectSEA.WebBlogProject.Services.AuthorityServiceImpl;
+import com.webprojectSEA.WebBlogProject.Services.AuhtServices.AuthorityServiceImpl;
 import com.webprojectSEA.WebBlogProject.model.Authority;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class AuthorityController {
 
 

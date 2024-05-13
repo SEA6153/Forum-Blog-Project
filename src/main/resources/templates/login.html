@@ -8,10 +8,11 @@
 </head>
 <body>
         <div class="container">
+
             <form action="#" th:action="@{/login}" method="post">
                 <div class="form-group">
                     <label for="email">E-Mail</label>
-                    <input id="email" type="text" name="email" placeholder="E-Mail">
+                    <input id="email" type="text" name="username" placeholder="E-Mail or Nickname">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
@@ -20,6 +21,8 @@
                 <button type="submit">Login!</button>
 
             </form>
+            <br>
+            <a th:href="@{'/'}">HOME</a>
         </div>
 
 

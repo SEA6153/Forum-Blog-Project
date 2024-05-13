@@ -24,10 +24,13 @@ public class LoginController {
     }
 
 
-    @GetMapping("/login")
+    @GetMapping("login")
     public String getLoginPage(){
         return "login";
     }
+
+
+
 
 
 
@@ -35,17 +38,15 @@ public class LoginController {
        return userDetailsService.loadUserByUsername(username);
     }
 
-    @GetMapping("/user/id")
+    @GetMapping("user/id")
     public Long getLoggedInUserId(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
 
-
         Optional<UserAccount> user = userAccountRepository.findByNickname(username);
 
         if (user.isPresent()) {
-
-            if (!user.get().isActive()) {
+            if (!user.get().isEnabled()) {
                 throw new RuntimeException("User is not active");
             }
             return user.get().getId();

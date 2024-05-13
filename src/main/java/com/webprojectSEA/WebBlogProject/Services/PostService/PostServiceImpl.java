@@ -1,9 +1,10 @@
 
-package com.webprojectSEA.WebBlogProject.Services;
+package com.webprojectSEA.WebBlogProject.Services.PostService;
 
 
 import com.webprojectSEA.WebBlogProject.Repostories.PostRepository;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
+import com.webprojectSEA.WebBlogProject.Services.PostService.PostService;
 import com.webprojectSEA.WebBlogProject.model.Post;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 
 @Service
-public class PostServiceImpl implements PostService{
+public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserAccountRepository userAccountRepository;

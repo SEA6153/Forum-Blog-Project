@@ -5,10 +5,11 @@ import lombok.Getter;
 @Getter
 public enum Roles {
 
-    ADMIN("ADMIN"),
-    USER("USER"),
-    SUPERUSER("SUPERUSER"),
-    UNDEFINED("UNDEFINED");
+    ROLE_ADMIN("ROLE_ADMIN"),
+    ROLE_USER("ROLE_USER"),
+    ROLE_SUPERUSER("ROLE_SUPERUSER"),
+    ROLE_MODERATOR("ROLE_MODERATOR"),
+    ROLE_UNDEFINED("ROLE_UNDEFINED");
 
 
 

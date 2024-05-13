@@ -1,4 +1,4 @@
-package com.webprojectSEA.WebBlogProject.Services;
+package com.webprojectSEA.WebBlogProject.Services.PostService;
 
 import com.webprojectSEA.WebBlogProject.model.Post;
 

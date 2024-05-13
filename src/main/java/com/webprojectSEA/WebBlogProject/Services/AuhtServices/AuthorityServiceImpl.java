@@ -1,6 +1,7 @@
-package com.webprojectSEA.WebBlogProject.Services;
+package com.webprojectSEA.WebBlogProject.Services.AuhtServices;
 
 import com.webprojectSEA.WebBlogProject.Repostories.UserAuthorityRepository;
+import com.webprojectSEA.WebBlogProject.Services.AuhtServices.AuthorityService;
 import com.webprojectSEA.WebBlogProject.model.Authority;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,7 @@
-package com.webprojectSEA.WebBlogProject.Services;
+package com.webprojectSEA.WebBlogProject.Services.LoginServices;
 
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
+import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountServiceImpl;
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.LockedException;
@@ -41,7 +42,6 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
             userAccountServiceImpl.disableUser(username);
             attemptsCache.remove(username);
         } else {
-            // Başarısız giriş denemesi olduğunda failedAttempt değerini artır
             handleFailedLoginAttempt(username);
         }
     }

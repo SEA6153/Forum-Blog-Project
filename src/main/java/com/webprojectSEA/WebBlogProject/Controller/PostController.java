@@ -1,7 +1,7 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
-import com.webprojectSEA.WebBlogProject.Services.PostServiceImpl;
+import com.webprojectSEA.WebBlogProject.Services.PostService.PostServiceImpl;
 import com.webprojectSEA.WebBlogProject.model.Post;
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -99,10 +99,9 @@ public class PostController {
         return "redirect:/posts/" + post.getId();
     }
 
-    //@PostMapping("/posts/{id}/delete")
-    @DeleteMapping("{id}")
+    @PostMapping("/posts/{id}/delete")
     public String deletePost(@PathVariable Long id, Authentication authentication) {
-        Long loggedInUserId = loginController.getLoggedInUserId(authentication);
+        Long loggedInUserId = Long.valueOf(loginController.getLoggedInUserId(authentication));
 
         Optional<Post> optionalPost = postServiceImpl.getById(id);
         if (optionalPost.isPresent()) {
@@ -121,6 +120,7 @@ public class PostController {
             return "404"; // Sayfa bulunamadı sayfasına yönlendir
         }
     }
+
 
 
 

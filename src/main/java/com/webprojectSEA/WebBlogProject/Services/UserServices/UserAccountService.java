@@ -1,4 +1,4 @@
-package com.webprojectSEA.WebBlogProject.Services;
+package com.webprojectSEA.WebBlogProject.Services.UserServices;
 
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
 

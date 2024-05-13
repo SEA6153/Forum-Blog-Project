@@ -1,6 +1,6 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
-import com.webprojectSEA.WebBlogProject.Services.PostServiceImpl;
+import com.webprojectSEA.WebBlogProject.Services.PostService.PostServiceImpl;
 import com.webprojectSEA.WebBlogProject.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

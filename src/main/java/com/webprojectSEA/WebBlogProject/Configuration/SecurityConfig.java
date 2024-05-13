@@ -1,35 +1,55 @@
 package com.webprojectSEA.WebBlogProject.Configuration;
 
+import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Configuration
 public class SecurityConfig {
+    private static final String[] WHITELIST = {
+            "/",
+            "/register",
+            "/posts/{id}"
+    };
 
-    private final JwtRequestFilter jwtRequestFilter;
-    private final AuthenticationFailureHandler authenticationFailureHandler;
 
-    public SecurityConfig(JwtRequestFilter jwtRequestFilter, AuthenticationFailureHandler authenticationFailureHandler) {
-        this.jwtRequestFilter = jwtRequestFilter;
-        this.authenticationFailureHandler = authenticationFailureHandler;
-    }
+    @Autowired
+    private UserAccountDetailsServiceImpl userDetailsService;
+    @Autowired
+    private AuthSuccessHandler authSuccessHandler;
+
+
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+
+
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+
+    }
+
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(WHITELIST).permitAll()
@@ -39,40 +59,6 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/", true)
-                .failureUrl("/login?error").permitAll()
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-                .and()
-                .httpBasic();
-
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    private static final String[] WHITELIST = {
-            "/",
-            "/register",
-            "/posts/{id}/delete"
-    };
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .authorizeRequests()
-                .antMatchers(WHITELIST).permitAll()
-                .antMatchers(HttpMethod.GET, "/posts/*").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .usernameParameter("email")
-                .passwordParameter("password")
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error").permitAll()
                 .and()
@@ -82,6 +68,9 @@ public class SecurityConfig {
                 .and()
                 .httpBasic();
 
-        return httpSecurity.build();
+        return http.build();
     }
-}
+
+    }
+
+
