@@ -14,13 +14,13 @@
         <form action="#" th:action="@{'/posts/new'}" th:object="${post}" method="post">
             <input type="hidden" th:field="*{userAccount}"/>
             <input type="hidden" th:field="*{createdAt}">
-            <h2>Title Open - Write a new Post</h2>
+            <h2>Title Open - Create a new Post</h2>
             <div>
-                <label for="new-post-title">Title</label>
+                <label class="caption-label" for="new-post-title">Title</label>
                 <input id="new-post-title" type="text" placeholder="Title" th:field="*{title}">
             </div>
             <div>
-                <label for="new-post-exp">Explanation</label>
+                <label class="caption-label" for="new-post-exp">Explanation</label>
                 <textarea id="new-post-exp" placeholder="Please Enter Your Explanation" th:field="*{explanation}">
                 </textarea>
             </div>

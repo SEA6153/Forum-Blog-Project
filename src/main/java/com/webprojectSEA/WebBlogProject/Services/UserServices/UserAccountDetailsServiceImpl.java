@@ -30,18 +30,18 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
         } else if (optionalUserAccountFindByEmail.isPresent()) {
             UserAccount account = optionalUserAccountFindByEmail.get();
             List<GrantedAuthority> grantedAuthorities = account
-                    .getAuthoritySet()
+                    .getRoles()
                     .stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+                    .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityRoles()))
                     .collect(Collectors.toList());
             return new User(account.getEmail(),
                     account.getPassword(), grantedAuthorities);
         } else {
             UserAccount account1 = optionalUserAccountFindByNickname.get();
             List<GrantedAuthority> grantedAuthorities = account1
-                    .getAuthoritySet()
+                    .getRoles()
                     .stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+                    .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityRoles()))
                     .collect(Collectors.toList());
             return new User(account1.getNickname(),
                     account1.getPassword(), grantedAuthorities);

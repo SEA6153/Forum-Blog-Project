@@ -1,5 +1,6 @@
 package com.webprojectSEA.WebBlogProject.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,14 +9,13 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -41,9 +41,9 @@ public class UserAccount {
     @NotNull
     private String email;
 
-    @Column
-    @NotNull
-    private Roles role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private List<Roles> roles;
 
     private boolean isEnabled;
 
@@ -61,13 +61,9 @@ public class UserAccount {
     @OneToMany(mappedBy = "userAccount")
     private List<Post> posts;
 
-
-
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_account_authority", joinColumns = {@JoinColumn(name = "user_account_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-    private Set<Authority> authoritySet = new HashSet<>();
+    private String userProfilePic;
+    @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostComment> comments;
 
     @Override
     public String toString() {
@@ -78,10 +74,16 @@ public class UserAccount {
                 ", password='" + password + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", email='" + email + '\'' +
+                ", role=" + roles +
+                ", isEnabled=" + isEnabled +
+                ", isAccountNonLocked=" + isAccountNonLocked +
+                ", failedAttempt=" + failedAttempt +
+                ", lockTime=" + lockTime +
+                ", verificationCode='" + verificationCode + '\'' +
+                ", active=" + active +
                 ", posts=" + posts +
-                ", authoritySet=" + authoritySet +
-                ", enabled= " + isEnabled +
+                "userProfilePic=" + userProfilePic +
+                "comments= " + comments +
                 '}';
     }
-
 }

@@ -28,22 +28,18 @@ public class SecurityConfig {
     private AuthSuccessHandler authSuccessHandler;
 
 
-
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
 
-
-
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
-
     }
 
 
@@ -54,6 +50,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(WHITELIST).permitAll()
                 .antMatchers(HttpMethod.GET, "/posts/*").permitAll()
+                .antMatchers("/css/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -71,6 +68,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    }
+}
 
 

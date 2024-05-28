@@ -1,0 +1,46 @@
+.footer2imp{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.redirecttologinButton {
+    margin: 0;
+    height: auto;
+    background: transparent;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+
+.redirecttologinButton {
+    --border-right: 3px;
+    --text-stroke-color: #ff9e01fc;
+    --animation-color: rgb(12, 176, 212);
+    --fs-size: 1.5em;
+    letter-spacing: 3px;
+    text-decoration: none;
+    font-size: var(--fs-size);
+    font-family: "Arial";
+    position: absolute;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--text-stroke-color);
+
+}
+.hover-text {
+    position: absolute;
+    box-sizing: border-box;
+    color: var(--animation-color);
+    width: 0;
+    inset: 0;
+    border-right: var(--border-right) solid var(--animation-color);
+    overflow: hidden;
+    transition: 0.5s;
+    -webkit-text-stroke: 1px var(--animation-color);
+
+}
+.redirecttologinButton:hover .hover-text {
+    width: 100%;
+    filter: drop-shadow(0 0 23px var(--animation-color))
+}

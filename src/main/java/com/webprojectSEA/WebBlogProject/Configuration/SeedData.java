@@ -7,10 +7,10 @@ import com.webprojectSEA.WebBlogProject.Repostories.UserAuthorityRepository;
 import com.webprojectSEA.WebBlogProject.Services.PostService.PostServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountServiceImpl;
 import com.webprojectSEA.WebBlogProject.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -20,8 +20,7 @@ public class SeedData implements CommandLineRunner {
     private final PostServiceImpl postServiceImpl;
     private final UserAccountServiceImpl accountService;
 
-    @Autowired
-    private final UserAuthorityRepository userAuthorityRepository;
+private final UserAuthorityRepository userAuthorityRepository;
 
 
 
@@ -45,11 +44,11 @@ public class SeedData implements CommandLineRunner {
 
 
             Authority user = new Authority();
-            user.setName("USER");
+            user.setRoleName(Roles.ROLE_USER);
             userAuthorityRepository.save(user);
 
             Authority admin = new Authority();
-            admin.setName("ADMIN");
+            admin.setRoleName(Roles.ROLE_ADMIN);
             userAuthorityRepository.save(admin);
 
 
@@ -66,7 +65,7 @@ public class SeedData implements CommandLineRunner {
             account1.setPassword("61536153-1");
             account1.setNickname("SEA6153-1");
             account1.setEnabled(true);
-            account1.setRole(Roles.ROLE_USER);
+            account1.setRoles(Collections.singletonList(Roles.ROLE_ADMIN));
 
             account2.setFirstName("Samet2");
             account2.setLastName("AŞIK21345");
@@ -74,7 +73,7 @@ public class SeedData implements CommandLineRunner {
             account2.setPassword("61536153-2");
             account2.setNickname("SEA6153-2");
             account2.setEnabled(true);
-            account2.setRole(Roles.ROLE_MODERATOR);
+            account2.setRoles(Collections.singletonList(Roles.ROLE_MODERATOR));
 
 
             account3.setFirstName("Samet3");
@@ -83,7 +82,7 @@ public class SeedData implements CommandLineRunner {
             account3.setPassword("61536153-3");
             account3.setNickname("SEA6153-3");
             account3.setEnabled(false);
-            account3.setRole(Roles.ROLE_ADMIN);
+            account3.setRoles(Collections.singletonList(Roles.ROLE_ADMIN));
 
 
             accountService.save(account1);

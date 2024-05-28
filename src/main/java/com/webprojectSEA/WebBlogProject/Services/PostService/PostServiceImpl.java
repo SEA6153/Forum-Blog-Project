@@ -4,7 +4,6 @@ package com.webprojectSEA.WebBlogProject.Services.PostService;
 
 import com.webprojectSEA.WebBlogProject.Repostories.PostRepository;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
-import com.webprojectSEA.WebBlogProject.Services.PostService.PostService;
 import com.webprojectSEA.WebBlogProject.model.Post;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +55,13 @@ public class PostServiceImpl implements PostService {
         } else {
             throw new IllegalArgumentException("Post not found");
         }
+    }
+
+    @Override
+    public List<Post> getPostsByUserId(Long userId) {
+
+        return postRepository.findAllByUserAccountId(userId);
+
     }
 }
 

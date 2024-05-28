@@ -1,13 +1,8 @@
 package com.webprojectSEA.WebBlogProject.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -15,17 +10,17 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Authority implements Serializable {
 
     @Id
-    @Column(length = 16)
-    private String name;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
-    @Override
-    public String toString(){
-        return "Authority{" +
-                "name =' " + name + "'" +
-                "}";
+    @Enumerated(EnumType.STRING)
+    private Roles roleName;
+
+    public Authority(Roles roleName) {
+        this.roleName = roleName;
     }
-
 }

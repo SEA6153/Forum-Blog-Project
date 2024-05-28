@@ -14,7 +14,6 @@ import java.util.Optional;
 public class LoginController {
 
 
-
     private final UserDetailsService userDetailsService;
     private final UserAccountRepository userAccountRepository;
 
@@ -25,18 +24,10 @@ public class LoginController {
 
 
     @GetMapping("login")
-    public String getLoginPage(){
+    public String getLoginPage() {
         return "login";
     }
 
-
-
-
-
-
-    public UserDetails loginControlwithUserName(String username){
-       return userDetailsService.loadUserByUsername(username);
-    }
 
     @GetMapping("user/id")
     public Long getLoggedInUserId(Authentication authentication) {
@@ -53,6 +44,18 @@ public class LoginController {
         } else {
             throw new RuntimeException("User not found with username: " + username);
         }
+
+
     }
 
+    public String getLoggedInUserNickname(Authentication authentication){
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                return ((UserDetails) principal).getUsername();
+            }
+        }
+        return null;
+
+    }
 }

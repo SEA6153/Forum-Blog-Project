@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Comments</title>
+</head>
+<body>
+<h1>My Comments</h1>
+<div th:if="${userComments.isEmpty()}">
+    <p>You have not created any comments yet.</p>
+</div>
+<div th:each="comment : ${userComments}">
+    <h2 th:text="${comment.postTitle}">Post Title</h2>
+    <p th:text="${comment.text}">Comment Text</p>
+    <p>Created At: <span th:text="${comment.createdAt}">Comment Creation Date</span></p>
+    <form th:action="@{'/posts/' + ${comment.post.id} + '/comment/' + ${comment.id} + '/edit'}" method="get">
+        <button type="submit">Edit</button>
+    </form>
+    <form th:action="@{'/posts/' + ${comment.post.id} + '/comment/' + ${comment.id} + '/delete'}" method="post">
+        <button type="submit">Delete</button>
+    </form>
+</div>
+</body>
+</html>

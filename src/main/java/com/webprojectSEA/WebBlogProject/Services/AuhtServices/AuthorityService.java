@@ -1,7 +1,8 @@
 package com.webprojectSEA.WebBlogProject.Services.AuhtServices;
 
 import com.webprojectSEA.WebBlogProject.model.Authority;
+import com.webprojectSEA.WebBlogProject.model.Roles;
 
 public interface AuthorityService {
-    Authority saveAuthority(String name);
+    Authority saveAuthority(Roles authorityRoles);
 }

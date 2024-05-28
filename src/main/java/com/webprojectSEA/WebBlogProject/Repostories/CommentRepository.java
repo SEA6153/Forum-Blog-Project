@@ -1,20 +1,14 @@
-
-//POST REPO
-
 package com.webprojectSEA.WebBlogProject.Repostories;
 
-
 import com.webprojectSEA.WebBlogProject.model.Post;
+import com.webprojectSEA.WebBlogProject.model.PostComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface CommentRepository extends JpaRepository<PostComment, Long> {
 
-    Optional<Post> findByUserAccountId(Long userID);
-
-    List<Post> findAllByUserAccountId(Long userId);
-}
+    List<PostComment> findByPost(Post post);
+ }

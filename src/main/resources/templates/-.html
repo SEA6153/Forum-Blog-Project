@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <a th:href="@{/static}">Home</a>
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <div class="popup-top-content">
+                <div class="popup-text">Create a New Post</div>
+                <button class="closepopup" id="closepopup" onclick="closePopup()">
+                    &times;
+                </button>
+            </div>
+            <form id="new-post-form" th:action="@{'/posts/new'}" th:object="${post}" method="post">
+                <input type="hidden" th:field="*{userAccount}"/>
+                <input type="hidden" th:field="*{createdAt}">
+                <h2>Title Open - Create a new Post</h2>
+                <div class="input-caption">
+                    <input  class="input-heading"  required=""
+                            type="text"
+                            name="text"
+                            autocomplete="off"  id="new-post-title" type="text"  th:field="*{title}">
+                    <label class="caption-label" for="new-post-title">Title</label>
+                </div>
+                <div class="input-messageDiv">
+                    <textarea
+                            id="new-post-exp"
+                            th:field="*{explanation}"
+                            required=""
+                            name="text"
+                            autocomplete="off"
+                            class="input-message"
+                    ></textarea>
+                    <label class="caption-label" for="new-post-exp">Explanation</label>
+                </div>
+                <div>
+                    <label class="select" for="category">Category</label>
+                    <select class="select" id="category" name="category"  th:field="*{category}">
+                        <option value="" th:each=" category : ${T(com.webprojectSEA.WebBlogProject.model.Category).values()}"
+                                th:value="${category}" th:text="${category.getCategoryNames()}" ></option>
+                    </select>
+                </div>
+                <button  class="popup-text" type="submit">Create a new Post</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

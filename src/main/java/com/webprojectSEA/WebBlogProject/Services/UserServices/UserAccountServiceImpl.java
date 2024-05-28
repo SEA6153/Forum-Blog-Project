@@ -1,8 +1,6 @@
 package com.webprojectSEA.WebBlogProject.Services.UserServices;
 
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
-import com.webprojectSEA.WebBlogProject.Repostories.UserAuthorityRepository;
-import com.webprojectSEA.WebBlogProject.model.Authority;
 import com.webprojectSEA.WebBlogProject.model.Roles;
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,32 +16,17 @@ public class UserAccountServiceImpl implements UserAccountService{
     private PasswordEncoder passwordEncoder;
     @Autowired
     private  UserAccountRepository accountRepository;
-    private  final UserAuthorityRepository authorityRepository;
 
     public static final long LOCK_DURATION_TIME = 30000;
     public static final long ATTEMPT_TIME = 3;
 
     // Constructor Injection
-    public UserAccountServiceImpl(UserAuthorityRepository authorityRepository) {
-        this.authorityRepository = authorityRepository;
-    }
+
 
     @Override
     public UserAccount save(UserAccount userAccount) {
         userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
-
-
-        Authority userAuthority = authorityRepository.findByName("USER");
-        if (userAuthority == null) {
-            userAuthority = new Authority();
-            userAuthority.setName(Roles.ROLE_USER.toString());
-            userAuthority = authorityRepository.save(userAuthority);
-        }
-        Set<Authority> authorities = new HashSet<>();
-        authorities.add(userAuthority);
-        userAccount.setAuthoritySet(authorities);
-
-
+        userAccount.setRoles(Collections.singletonList(Roles.ROLE_USER));
         userAccount.setEnabled(true);
 
         return accountRepository.save(userAccount);

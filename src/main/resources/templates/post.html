@@ -1,36 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE-edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BLOG :: POST</title>
+    <title>Post Details</title>
 </head>
 <body>
-        <div class="container">
-            <a th:href="@{'/'}">HOME</a>
-                    <div class="post">
-                        <h2 th:text="${post.title}">TITLE</h2>
-                        <h3 th:text="'Written by ' + ${post.userAccount.nickname}">Written by</h3>
-                        <h3 th:text="${post.category}">Category is </h3>
-                        <h5 th:text="'Created on ' + ${post.createdAt}">Created at</h5>
-                        <p th:text="${post.explanation}">Post Explanation</p>
-                    </div>
-            <ul sec:authorize="isAuthenticated()">
-                <li><a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a></li>
-            </ul>
-            <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="post">
+<div class="container">
+    <a th:href="@{'/'}">HOME</a>
+    <div class="post">
+        <h2 th:text="${post.title}">TITLE</h2>
+        <h3 th:text="'Written by ' + ${post.userAccount.nickname}">Written by</h3>
+        <h3 th:text="${post.category}">Category is </h3>
+        <h5 th:text="'Created on ' + ${post.createdAt}">Created at</h5>
+        <p th:text="${post.explanation}">Post Explanation</p>
+    </div>
+        <!-- Edit and Delete Buttons for Post Owner -->
+        <div th:if="${isPostOwner}">
+            <a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a>
+            <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="post" style="display:inline;">
                 <button type="submit">Delete</button>
             </form>
-                </div>
-</body>
-<style>body{
-    background-color: black;
-}
-.post{
-    color: white;
-    text-align: center;
-}
+        </div>
 
-</style>
+    <div>
+        <h2>Comments</h2>
+        <div th:each="comment : ${postComments}">
+            <p>
+                <strong th:text="${comment.userAccount.nickname}">User nickname</strong>:
+                <span th:text="${comment.text}">Comment text</span>
+            </p>
+            <div th:if="${comment.userAccount.id} == ${userAccount.id}">
+                <form th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id} + '/edit'}" method="post">
+                    <textarea name="text" required th:text="${comment.text}"></textarea>
+                    <button type="submit">Edit</button>
+                </form>
+                <form th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id} + '/delete'}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Comment Form -->
+    <div th:if="${#authentication.name != 'anonymousUser'}">
+        <h2 style="color: white">Add a Comment</h2>
+        <form method="post" th:action="@{'/posts/' + ${post.id}}">
+            <input type="hidden" name="nickname" th:value="${#authentication.name}" />
+            <textarea name="text" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+</body>
 </html>

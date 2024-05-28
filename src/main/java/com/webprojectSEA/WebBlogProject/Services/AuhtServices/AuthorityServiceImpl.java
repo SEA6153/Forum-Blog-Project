@@ -1,13 +1,12 @@
 package com.webprojectSEA.WebBlogProject.Services.AuhtServices;
 
 import com.webprojectSEA.WebBlogProject.Repostories.UserAuthorityRepository;
-import com.webprojectSEA.WebBlogProject.Services.AuhtServices.AuthorityService;
 import com.webprojectSEA.WebBlogProject.model.Authority;
+import com.webprojectSEA.WebBlogProject.model.Roles;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
-
 
     private final UserAuthorityRepository authorityRepository;
 
@@ -15,9 +14,10 @@ public class AuthorityServiceImpl implements AuthorityService {
         this.authorityRepository = authorityRepository;
     }
 
+
     @Override
-    public Authority saveAuthority(String name) {
-        Authority authority = new Authority(name);
+    public Authority saveAuthority(Roles authorityRoles) {
+        Authority authority = new Authority(authorityRoles);
         return authorityRepository.save(authority);
     }
 }

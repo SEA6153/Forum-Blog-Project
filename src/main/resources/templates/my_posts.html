@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Posts</title>
+</head>
+<body>
+<h1>My Posts</h1>
+<div th:if="${userPosts.isEmpty()}">
+    <p>You have not created any posts yet.</p>
+</div>
+<div th:each="post : ${userPosts}">
+    <h2 th:text="${post.title}">Post Title</h2>
+    <p th:text="${post.explanation}">Post Explanation</p>
+    <p>Category: <span th:text="${post.category}">Post Category</span></p>
+    <p>Created At: <span th:text="${post.createdAt}">Post Creation Date</span></p>
+
+    <div>
+        <a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a>
+        <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="POST" style="display:inline;">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
