@@ -11,6 +11,15 @@
     <link href="css/footerimp.css" type="text/css" rel="stylesheet">
     <title>BLOG :: Posts</title>
     <link type="text/html">
+    <script>
+        function sortPosts() {
+            document.getElementById('postForm').submit();
+        }
+
+        function searchPosts() {
+            document.getElementById('postForm').submit();
+        }
+    </script>
 </head>
 <body>
 <header>
@@ -64,35 +73,82 @@
             </form>
         </div>
     </div>
+    </div>
 </header>
+<div class="container">
+    <h1>MY BLOG APP FORUM</h1>
 
+    <!-- Form for Sorting and Searching -->
+    <form id="postForm" action="/posts" method="get">
+        <!-- Sorting Options -->
+        <div class="sorting-options">
+            <label for="sortOption">Sırala:</label>
+            <select id="sortOption" name="sortOption">
+                <option value="createdAt_desc" th:selected="${sortField == 'createdAt' and sortDirection == 'desc'}">Tarihe göre en yeni</option>
+                <option value="createdAt_asc" th:selected="${sortField == 'createdAt' and sortDirection == 'asc'}">Tarihe göre en eski</option>
+                <option value="likes_asc" th:selected="${sortField == 'likes' and sortDirection == 'asc'}">En fazla beğenilen</option>
+                <option value="likes_desc" th:selected="${sortField == 'likes' and sortDirection == 'desc'}">En az beğenilen</option>
 
-    <div class="container">
-        <h1>MY BLOG APP FORUM</h1>
-        <div class="posts-container">
-            <div>
-                <a sec:authorize="isAuthenticated()" th:href="@{/posts/new}" class="newPostLink">Create a new Post</a>
-                <a th:if="${userAccount}" sec:authorize="isAuthenticated()"
-                   th:href="@{'/user/' + ${userAccount.nickname} + '/profile'}" class="newPostLink">My Profile</a>
-                <a sec:authorize="isAuthenticated()" th:href="@{/my/posts}">My Posts</a>
-                <a sec:authorize="isAuthenticated()" th:href="@{/my/comments}">My Comments</a>
+            </select>
+        </div>
 
-            </div>
-            <div class="post" th:each="post : ${posts}">
-                <h2 class="post-title"><a th:href="@{'/posts/' + ${post.id}}"
-                th:text="${post.title}">Title</a>
+        <!-- Search Form -->
+        <div class="search-form">
+            <input type="text" id="searchQuery" name="searchQuery" placeholder="Gönderileri Ara" th:value="${query}">
+            <select id="category" name="category">
+                <option value="">Kategori Seç</option>
+                <option th:each="cat : ${categories}" th:value="${cat.name()}" th:text="${cat.getCategoryNames()}"></option>
+            </select>
+            <button type="submit">Ara</button>
+        </div>
+    </form>
+    <div class="posts-container">
+        <div>
+            <a sec:authorize="isAuthenticated()" th:href="@{/posts/new}" class="newPostLink">Yeni Gönderi Oluştur</a>
+            <a th:if="${userAccount}" sec:authorize="isAuthenticated()" th:href="@{'/user/' + ${userAccount.nickname} + '/profile'}" class="newPostLink">Profilim</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/my/posts}">Gönderilerim</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/my/comments}">Yorumlarım</a>
+            <div class="post" th:each="post : ${post}">
+                <h2 class="post-title">
+                    <a th:href="@{'/posts/' + ${post.id}}" th:text="${post.title}">Başlık</a>
                 </h2>
-                <h5 th:text="'Written by ' + ${post.userAccount.nickname}">Nickname</h5>
-                <h3 th:text="'Category of the title is ' + ${post.category}"></h3>
-                <h5 th:text="'Published on ' + ${post.createdAt}">Created at
-                </h5>
-                <p th:text="${post.explanation}">--------Explanation of post------</p>
+                <div style="width: 10%; align-items: center; justify-content: center; text-align: center">
+                    <a th:href="@{'/user/' + ${post.userAccount.nickname} + '/profile'}" style="text-decoration: none; color: inherit;">
+                        <h5 style="color: white; border: solid white; width: 100%; margin-left: 785px" th:text="'Yazan: ' + ${post.userAccount.nickname}">Kullanıcı Adı</h5>
+                    </a>
+                    <!-- Role alanı boş değilse kontrol et ve görüntüle -->
+                    <h2 style="color: white" th:if="${post.userAccount.roles != null and #lists.size(post.userAccount.roles) > 0}" th:text="${post.userAccount.roles[0]}"></h2>
+                </div>
+                <div style="width: 100%; height: 100%; justify-content: stretch; margin-bottom: 60px">
+                    <a th:href="@{'/user/' + ${post.userAccount.nickname} + '/profile'}">
+                        <img th:src="${post.userAccount.userProfilePic}" style="height: 1%; width: 8%; top: -50px">
+                    </a>
+                </div>
+                <h3 style="color: white" th:text="'Kategori: ' + ${post.category}"></h3>
+                <h5 style="color: white;" th:text="${post.createdAt != null ? 'Created on ' + #temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm') : 'Creation date not available'}">Created at</h5>
+                <p style="color: white" th:text="${post.explanation}">Açıklama</p>
+                <img th:if="${post.imageUrl != null}" th:src="@{${post.imageUrl}}" alt="Post Image" style="max-width: 30%; height: auto;">
 
+                <div>
+                    <form sec:authorize="isAuthenticated()" th:action="@{/posts/{id}/like(id=${post.id})}" method="post" style="display:inline;">
+                        <button type="submit" th:text="${userAccount != null && post.likes.contains(userAccount) ? 'Beğenmekten Vazgeç' : 'Beğen'}"></button>
+                    </form>
+                    <span style="color: white" th:text="${post.likeCount}">0</span>
+
+                    <form sec:authorize="isAuthenticated()" th:action="@{/posts/{id}/dislike(id=${post.id})}" method="post" style="display:inline;">
+                        <button type="submit" th:text="${userAccount != null && post.dislikes.contains(userAccount) ? 'Beğenmeyi Kaldır' : 'Beğenme'}"></button>
+                    </form>
+                    <span style="color: white" th:text="${post.dislikeCount}">0</span>
+                </div>
             </div>
 
         </div>
+</div>
+</div>
 
-    </div>
+
+
+
 <div class="box-of-star1">
     <div class="star star-position1"></div>
     <div class="star star-position2"></div>

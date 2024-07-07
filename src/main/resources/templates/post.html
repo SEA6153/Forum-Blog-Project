@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <title>Post Details</title>
 </head>
@@ -9,44 +9,108 @@
     <div class="post">
         <h2 th:text="${post.title}">TITLE</h2>
         <h3 th:text="'Written by ' + ${post.userAccount.nickname}">Written by</h3>
-        <h3 th:text="${post.category}">Category is </h3>
-        <h5 th:text="'Created on ' + ${post.createdAt}">Created at</h5>
+        <h3 th:text="${post.category}">Category is</h3>
+        <h5 th:text="${post.createdAt != null ? 'Post Created ' + post.timeAgo : 'Creation date not available'}">Created at</h5>
         <p th:text="${post.explanation}">Post Explanation</p>
+        <img th:if="${post.imageUrl != null}" th:src="@{${post.imageUrl}}" alt="Post Image" style="max-width: 30%; height: auto;">
     </div>
-        <!-- Edit and Delete Buttons for Post Owner -->
-        <div th:if="${isPostOwner}">
-            <a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a>
-            <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="post" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
-        </div>
 
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <form th:action="@{'/posts/' + ${post.id} + '/like'}" method="post" style="display:inline;">
+            <button type="submit" th:disabled="${post.likes != null and post.likes.contains(userAccount)}">Like</button>
+        </form>
+        <span th:text="${post.likeCount}">0</span>
+
+        <form th:action="@{'/posts/' + ${post.id} + '/dislike'}" method="post" style="display:inline;">
+            <button type="submit" th:disabled="${post.dislikes != null and post.dislikes.contains(userAccount)}">Dislike</button>
+        </form>
+        <span th:text="${post.dislikeCount}">0</span>
+
+        <form th:action="@{'/posts/' + ${post.id} + '/unlike'}" method="post" style="display:inline;" th:if="${post.likes != null and post.likes.contains(userAccount)}">
+            <button type="submit">Unlike</button>
+        </form>
+
+        <form th:action="@{'/posts/' + ${post.id} + '/undislike'}" method="post" style="display:inline;" th:if="${post.dislikes != null and post.dislikes.contains(userAccount)}">
+            <button type="submit">Undislike</button>
+        </form>
+    </div>
+
+    <div th:if="${post.userAccount.id == userAccountId}">
+        <a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a>
+        <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="post" style="display:inline;">
+            <button type="submit">Delete</button>
+        </form>
+    </div>
     <div>
         <h2>Comments</h2>
         <div th:each="comment : ${postComments}">
+            <p>-----------------------------------------------------------------------------------</p>
+            <a th:href="@{'/user/' + ${comment.userAccount.nickname} + '/profile'}" style="text-decoration: none; color: inherit;">
+                <h2 style="color: black; font-size: 15px" th:text="${comment.userAccount.roles[0]}"></h2>
+                <h5 style="color: black;" th:text="'Yazan: ' + ${comment.userAccount.nickname}">Kullanıcı Adı</h5>
+            </a>
+            <a th:href="@{'/user/' + ${comment.userAccount.nickname} + '/profile'}">
+                <img th:src="${comment.userAccount.userProfilePic}" style="height: 50px; width: 50px;">
+            </a>
+            </br>
+            <h5 style="color: black;" th:text="${comment.createdAt != null ? 'Comment created ' + comment.timeAgo : 'Creation date not available'}">Created at</h5>
+
             <p>
-                <strong th:text="${comment.userAccount.nickname}">User nickname</strong>:
                 <span th:text="${comment.text}">Comment text</span>
             </p>
-            <div th:if="${comment.userAccount.id} == ${userAccount.id}">
-                <form th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id} + '/edit'}" method="post">
-                    <textarea name="text" required th:text="${comment.text}"></textarea>
+            <div th:if="${comment.photoUrl != null}">
+                <img th:src="@{${comment.photoUrl}}" alt="Comment Photo" style="max-width: 30%; height: auto;">
+            </div>
+            <div>
+                <!-- Like/Dislike buttons for authenticated users -->
+                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                    <form th:action="@{'/comments/' + ${comment.id} + '/like'}" method="post" style="display:inline;">
+                        <button type="submit" th:disabled="${comment.likes != null and comment.likes.contains(userAccount)}">Like</button>
+                    </form>
+                    <span th:text="${comment.likeCount}">0</span>
+
+                    <form th:action="@{'/comments/' + ${comment.id} + '/dislike'}" method="post" style="display:inline;">
+                        <button type="submit" th:disabled="${comment.dislikes != null and comment.dislikes.contains(userAccount)}">Dislike</button>
+                    </form>
+                    <span th:text="${comment.dislikeCount}">0</span>
+
+                    <form th:action="@{'/comments/' + ${comment.id} + '/unlike'}" method="post" style="display:inline;" th:if="${comment.likes != null and comment.likes.contains(userAccount)}">
+                        <button type="submit">Unlike</button>
+                    </form>
+
+                    <form th:action="@{'/comments/' + ${comment.id} + '/undislike'}" method="post" style="display:inline;" th:if="${comment.dislikes != null and comment.dislikes.contains(userAccount)}">
+                        <button type="submit">Undislike</button>
+                    </form>
+                </div>
+                <!-- Like/Dislike counts for unauthenticated users -->
+                <div th:if="${!#authorization.expression('isAuthenticated()')}">
+                    <span>Likes: <span th:text="${comment.likeCount}">0</span></span>
+                    <span>Dislikes: <span th:text="${comment.dislikeCount}">0</span></span>
+                </div>
+            </div>
+            <div th:if="${comment.userAccount.id == userAccountId}">
+                <!-- Edit Form -->
+                <form th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id} + '/edit'}" method="post" enctype="multipart/form-data">
+                    <textarea name="text" th:placeholder="'Edit Your Comment'" th:text="${comment.text}"></textarea>
+                    <input type="file" name="photo" accept="image/*">
                     <button type="submit">Edit</button>
                 </form>
+
+                <!-- Delete Form -->
                 <form th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id} + '/delete'}" method="post">
+                    <input type="hidden" value="delete" />
                     <button type="submit">Delete</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Add Comment Form -->
-    <div th:if="${#authentication.name != 'anonymousUser'}">
-        <h2 style="color: white">Add a Comment</h2>
-        <form method="post" th:action="@{'/posts/' + ${post.id}}">
-            <input type="hidden" name="nickname" th:value="${#authentication.name}" />
-            <textarea name="text" required></textarea>
-            <button type="submit">Submit</button>
+    <!-- Yorum ekleme formu -->
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <form th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post" enctype="multipart/form-data">
+            <textarea name="text" placeholder="Add a comment"></textarea>
+            <input type="file" name="photo" accept="image/*">
+            <button type="submit">Add Comment</button>
         </form>
     </div>
 </div>

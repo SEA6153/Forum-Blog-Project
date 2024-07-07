@@ -2,25 +2,78 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>My Posts</title>
+    <script>
+        function sortPosts() {
+            document.getElementById('postForm').submit();
+        }
+
+        function searchPosts() {
+            document.getElementById('postForm').submit();
+        }
+    </script>
 </head>
 <body>
 <h1>My Posts</h1>
 <div th:if="${userPosts.isEmpty()}">
     <p>You have not created any posts yet.</p>
 </div>
+<!-- Form for Sorting and Searching -->
+<form id="postForm" th:action="@{/my/posts}" method="get">
+    <!-- Sorting Options -->
+    <div class="sorting-options">
+        <label for="sortOption">Sort By:</label>
+        <select id="sortOption" name="sortOption" onchange="sortPosts()">
+            <option value="createdAt_desc" th:selected="${sortField == 'createdAt' and sortDirection == 'desc'}">Newest First</option>
+            <option value="createdAt_asc" th:selected="${sortField == 'createdAt' and sortDirection == 'asc'}">Oldest First</option>
+            <option value="likes_asc" th:selected="${sortField == 'likes' and sortDirection == 'asc'}">Most Liked</option>
+            <option value="likes_desc" th:selected="${sortField == 'likes' and sortDirection == 'desc'}">Least Liked</option>
+
+        </select>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <label for="searchQuery">Search:</label>
+        <input type="text" id="searchQuery" name="searchQuery" th:value="${query}">
+        <button type="button" onclick="searchPosts()">Search</button>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-filter">
+        <label for="category">Category:</label>
+        <select id="category" name="category" onchange="sortPosts()">
+            <option value="all" th:selected="${category == null or category.name() == 'ALL'}">All</option>
+            <option th:each="cat : ${categories}" th:value="${cat.name()}" th:text="${cat.name()}" th:selected="${category != null and category.name() == cat.name()}"></option>
+        </select>
+    </div>
+</form>
+
+<!-- Posts List -->
 <div th:each="post : ${userPosts}">
+    <div>
+        <a th:href="@{'/user/' + ${post.userAccount.nickname} + '/profile'}" style="text-decoration: none; color: inherit;">
+            <h2 style="color: black; font-size: 15px" th:text="${post.userAccount.roles[0]}"></h2>
+            <h5 style="color: black;" th:text="'Yazan: ' + ${post.userAccount.nickname}">Kullanıcı Adı</h5>
+        </a>
+        <a th:href="@{'/user/' + ${post.userAccount.nickname} + '/profile'}">
+            <img th:src="${post.userAccount.userProfilePic}" style="height: 50px; width: 50px;">
+        </a>
+    </div>
     <h2 th:text="${post.title}">Post Title</h2>
+    <img th:if="${post.imageUrl != null}" th:src="@{${post.imageUrl}}" alt="Post Image" style="max-width: 30%; height: auto;">
     <p th:text="${post.explanation}">Post Explanation</p>
     <p>Category: <span th:text="${post.category}">Post Category</span></p>
-    <p>Created At: <span th:text="${post.createdAt}">Post Creation Date</span></p>
-
-    <div>
+    <h5 th:text="${post.createdAt != null ? 'Post Created ' + post.timeAgo : 'Creation date not available'}">Created at</h5>
+    <span th:text="'Likes: ' + ${post.likeCount}">0</span>
+    <span th:text="'Dislikes: ' + ${post.dislikeCount}">0</span>
+    <div th:if="${post.userAccount.id} == ${userAccountId}">
         <a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a>
-        <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="POST" style="display:inline;">
+        <form th:action="@{'/posts/' + ${post.id} + '/delete'}"  method="POST" style="display:inline;" >
             <input type="hidden" name="_method" value="DELETE">
             <button type="submit">Delete</button>
         </form>
     </div>
 </div>
+<a th:href="@{'/'}">HOME</a>
 </body>
 </html>

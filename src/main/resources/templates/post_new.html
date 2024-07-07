@@ -3,38 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Blog :: New Post</title>
-    <title>Title</title>
 </head>
 <body>
 
-    <div class="container">
-        <a th:href="@{/}">Home</a>
-        <form action="#" th:action="@{'/posts/new'}" th:object="${post}" method="post">
-            <input type="hidden" th:field="*{userAccount}"/>
-            <input type="hidden" th:field="*{createdAt}">
-            <h2>Title Open - Create a new Post</h2>
-            <div>
-                <label class="caption-label" for="new-post-title">Title</label>
-                <input id="new-post-title" type="text" placeholder="Title" th:field="*{title}">
-            </div>
-            <div>
-                <label class="caption-label" for="new-post-exp">Explanation</label>
-                <textarea id="new-post-exp" placeholder="Please Enter Your Explanation" th:field="*{explanation}">
-                </textarea>
-            </div>
-            <div>
-                <label for="category">Category</label>
-                <select id="category" name="category"  th:field="*{category}">
-                    <option value="" th:each=" category : ${T(com.webprojectSEA.WebBlogProject.model.Category).values()}"
-                            th:value="${category}" th:text="${category.getCategoryNames()}" ></option>
-                </select>
-            </div>
-            <button type="submit">Create a new Post</button>
-
-        </form>
-    </div>
+<div class="container">
+    <a th:href="@{/}">Home</a>
+    <form th:action="@{/posts/new}" th:object="${post}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{userAccount}"/>
+        <input type="hidden" th:field="*{createdAt}">
+        <h2>Create a New Post</h2>
+        <div>
+            <label class="caption-label" for="new-post-title">Title</label>
+            <input id="new-post-title" type="text" placeholder="Title" th:field="*{title}">
+        </div>
+        <div>
+            <label class="caption-label" for="new-post-exp">Explanation</label>
+            <textarea id="new-post-exp" placeholder="Please Enter Your Explanation" th:field="*{explanation}"></textarea>
+        </div>
+        <div>
+            <label for="category">Category</label>
+            <select id="category" name="category" th:field="*{category}">
+                <option value="" th:each="category : ${T(com.webprojectSEA.WebBlogProject.model.Category).values()}"
+                        th:value="${category}" th:text="${category.getCategoryNames()}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="file">Image</label>
+            <input type="file" id="file" name="file">
+        </div>
+        <button type="submit">Create a New Post</button>
+    </form>
+</div>
 
 </body>
 </html>

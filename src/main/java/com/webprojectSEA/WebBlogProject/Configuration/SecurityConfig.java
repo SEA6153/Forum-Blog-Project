@@ -1,7 +1,6 @@
 package com.webprojectSEA.WebBlogProject.Configuration;
 
 import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,28 +10,32 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+
     private static final String[] WHITELIST = {
             "/",
             "/register",
-            "/posts/{id}"
+            "/posts/{id}",
+            "/css/**",
+            "/posts"
     };
 
+    private final UserAccountDetailsServiceImpl userDetailsService;
+    private final AuthSuccessHandler authSuccessHandler;
 
-    @Autowired
-    private UserAccountDetailsServiceImpl userDetailsService;
-    @Autowired
-    private AuthSuccessHandler authSuccessHandler;
-
+    public SecurityConfig(UserAccountDetailsServiceImpl userDetailsService, AuthSuccessHandler authSuccessHandler) {
+        this.userDetailsService = userDetailsService;
+        this.authSuccessHandler = authSuccessHandler;
+    }
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
@@ -41,22 +44,24 @@ public class SecurityConfig {
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
-
-
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+        return new HiddenHttpMethodFilter();
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf()
+                .and()
                 .authorizeRequests()
                 .antMatchers(WHITELIST).permitAll()
                 .antMatchers(HttpMethod.GET, "/posts/*").permitAll()
-                .antMatchers("/css/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/", true)
+                .successHandler(authSuccessHandler)
                 .failureUrl("/login?error").permitAll()
                 .and()
                 .logout()
@@ -67,7 +72,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 }
-
-

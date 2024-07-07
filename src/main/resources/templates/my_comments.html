@@ -1,23 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>My Comments</title>
+    <title>Yorumlarım</title>
+    <script type="text/javascript">
+        function sortPosts() {
+            document.getElementById("postForm").submit();
+        }
+
+        function searchPosts() {
+            document.getElementById("postForm").submit();
+        }
+    </script>
 </head>
 <body>
-<h1>My Comments</h1>
+<h1>Yorumlarım</h1>
 <div th:if="${userComments.isEmpty()}">
-    <p>You have not created any comments yet.</p>
+    <p>Henüz hiç yorum yapmadınız.</p>
 </div>
+<form id="postForm" th:action="@{/my/comments}" method="get">
+    <div class="sorting-options">
+        <label for="sortOption">Sort By:</label>
+        <select id="sortOption" name="sortOption" onchange="sortPosts()">
+            <option value="createdAt_desc" th:selected="${sortField == 'createdAt' and sortDirection == 'desc'}">Newest First</option>
+            <option value="createdAt_asc" th:selected="${sortField == 'createdAt' and sortDirection == 'asc'}">Oldest First</option>
+            <option value="likes_desc" th:selected="${sortField == 'likes' and sortDirection == 'desc'}">Most Liked</option>
+            <option value="likes_asc" th:selected="${sortField == 'likes' and sortDirection == 'asc'}">Least Liked</option>
+        </select>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <label for="searchQuery">Search:</label>
+        <input type="text" id="searchQuery" name="searchQuery" th:value="${query}">
+        <button type="button" onclick="searchPosts()">Search</button>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-filter">
+        <label for="category">Category:</label>
+        <select id="category" name="category" onchange="sortPosts()">
+            <option value="all" th:selected="${category == null or category.name() == 'ALL'}">All</option>
+            <option th:each="cat : ${categories}" th:value="${cat.name()}" th:text="${cat.name()}" th:selected="${category != null and category.name() == cat.name()}"></option>
+        </select>
+    </div>
+</form>
 <div th:each="comment : ${userComments}">
-    <h2 th:text="${comment.postTitle}">Post Title</h2>
-    <p th:text="${comment.text}">Comment Text</p>
-    <p>Created At: <span th:text="${comment.createdAt}">Comment Creation Date</span></p>
-    <form th:action="@{'/posts/' + ${comment.post.id} + '/comment/' + ${comment.id} + '/edit'}" method="get">
-        <button type="submit">Edit</button>
-    </form>
-    <form th:action="@{'/posts/' + ${comment.post.id} + '/comment/' + ${comment.id} + '/delete'}" method="post">
-        <button type="submit">Delete</button>
-    </form>
+    <p>-----------------------------------------------------------------------------------</p>
+
+    </br>
+    <a th:href="@{'/posts/' + ${comment.post.id}}" th:text="${comment.post.title}">Gönderi Başlığı</a>
+    </br>
+    <h4 th:text="'Category: ' + ${comment.post.category}"></h4>
+    <span th:text="'Likes: ' + ${comment.post.likeCount}">0</span>
+    <span th:text="'Dislikes: ' + ${comment.post.dislikeCount}">0</span>
+    </br>
+    <p>-----------------------------------------------</p>
+    <a th:href="@{'/user/' + ${comment.userAccount.nickname} + '/profile'}" style="text-decoration: none; color: inherit;">
+        <h2 style="color: black; font-size: 15px" th:text="${comment.userAccount.roles[0]}"></h2>
+        <h5 style="color: black;" th:text="'Yorumu Yazan Kullanıcı : ' + ${comment.userAccount.nickname}">Kullanıcı Adı</h5>
+    </a>
+    <h5 style="color: black;" th:text="${comment.createdAt != null ? 'Comment created ' + comment.timeAgo : 'Creation date not available'}">Created at</h5>
+    <a th:href="@{'/user/' + ${comment.userAccount.nickname} + '/profile'}">
+        <img th:src="${comment.userAccount.userProfilePic}" style="height: 50px; width: 50px;">
+    </a>
+    <p th:text="'Comment: ' + ${comment.text}">Yorum Metni</p>
+    <div th:if="${comment.photoUrl != null}">
+        <img style="max-width: 30%; height: auto;" th:src="@{${comment.photoUrl}}" alt="Yorum Fotoğrafı">
+    </div>
+
+
+    <h5 th:text="'Oluşturulma tarihi: ' + ${#temporals.format(comment.createdAt, 'dd-MM-yyyy HH:mm')}">Oluşturulma Tarihi</h5>
+    <span th:text="'Likes: ' + ${comment.likeCount}">0</span>
+    <span th:text="'Dislikes: ' + ${comment.dislikeCount}">0</span>
+    <div th:if="${comment.userAccount.id == userAccountId}">
+        <form th:action="@{'/my/comments/' + ${comment.id} + '/edit'}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" th:value="${comment.id}" />
+            <textarea name="text" required th:text=" ${comment.text}"></textarea>
+            <input type="file" name="photo" accept="image/*">
+            <button type="submit">Düzenle</button>
+        </form>
+        <form th:action="@{/my/comments/delete}" method="post" style="display: inline;">
+            <input type="hidden" name="id" th:value="${comment.id}" />
+            <button type="submit">Sil</button>
+        </form>
+    </div>
 </div>
+
+<div th:if="${!isLoggedIn}">
+    <p>Yorum yazmak ve fotoğraf yüklemek için lütfen giriş yapın.</p>
+</div>
+<a th:href="@{'/'}">HOME</a>
 </body>
 </html>

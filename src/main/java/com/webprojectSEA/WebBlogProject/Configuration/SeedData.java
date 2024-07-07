@@ -109,9 +109,9 @@ private final UserAuthorityRepository userAuthorityRepository;
             post3.setTitle("Title of post3");
             post3.setUserAccount(account3);
 
-            postServiceImpl.save(post1);
-            postServiceImpl.save(post2);
-            postServiceImpl.save(post3);
+            postServiceImpl.seedDatasave(post1);
+            postServiceImpl.seedDatasave(post2);
+            postServiceImpl.seedDatasave(post3);
 
         }
 

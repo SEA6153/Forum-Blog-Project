@@ -2,6 +2,7 @@ package com.webprojectSEA.WebBlogProject.Controller;
 
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
 import com.webprojectSEA.WebBlogProject.Services.PostService.PostServiceImpl;
+import com.webprojectSEA.WebBlogProject.model.Category;
 import com.webprojectSEA.WebBlogProject.model.Post;
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,15 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, Authentication authentication) {
-        String loggedInUserNickname = loginController.getLoggedInUserNickname(authentication);
-        if (loggedInUserNickname != null) {
-            Optional<UserAccount> userAccount = userAccountRepository.findByNickname(loggedInUserNickname);
+        String loggedInUserNicknameOrEmail = loginController.getLoggedInUserNickname(authentication);
+        if (loggedInUserNicknameOrEmail != null) {
+            Optional<UserAccount> userAccount = userAccountRepository.findByNicknameOrEmail(loggedInUserNicknameOrEmail, loggedInUserNicknameOrEmail);
             userAccount.ifPresent(user -> model.addAttribute("userAccount", user));
         }
 
-        // Tüm postları al ve modele ekle
-        List<Post> posts = postServiceImpl.getAll();
-        model.addAttribute("posts", posts);
-
+        List<Post> post = postServiceImpl.getAll();
+        model.addAttribute("post", post);
+        model.addAttribute("categories", Category.values());
         return "form";
     }
-
 }

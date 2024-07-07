@@ -9,7 +9,9 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -65,6 +67,14 @@ public class UserAccount {
     @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostComment> comments;
 
+    @ManyToMany(mappedBy = "likes")
+    private Set<Post> likedPosts = new HashSet<>();
+
+    @ManyToMany(mappedBy = "dislikes")
+    private Set<Post> dislikedPosts = new HashSet<>();
+
+
+
     @Override
     public String toString() {
         return "UserAccount{" +
@@ -82,8 +92,10 @@ public class UserAccount {
                 ", verificationCode='" + verificationCode + '\'' +
                 ", active=" + active +
                 ", posts=" + posts +
-                "userProfilePic=" + userProfilePic +
-                "comments= " + comments +
+                ", userProfilePic=" + userProfilePic +
+                ", comments= " + comments +
+                ", likedPosts = " + likedPosts +
+                "; dislikedPosts = " + dislikedPosts +
                 '}';
     }
 }

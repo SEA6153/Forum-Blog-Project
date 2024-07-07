@@ -3,11 +3,11 @@ package com.webprojectSEA.WebBlogProject.model;
 public enum Category {
 
 
-    SPORT("Sport"),
-    TECHNOLOGY("Technology"),
-    GAMES("Games"),
-    BOOKS("Books"),
-    SONGS("Songs");
+    SPORT("SPORT"),
+    TECHNOLOGY("TECHNOLOGY"),
+    GAMES("GAMES"),
+    BOOKS("BOOKS"),
+    SONGS("SONGS");
 
 
 

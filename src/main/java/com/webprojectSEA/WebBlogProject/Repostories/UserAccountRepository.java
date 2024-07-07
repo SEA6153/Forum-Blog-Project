@@ -19,7 +19,14 @@ public interface UserAccountRepository  extends JpaRepository<UserAccount, Long>
 
     @Query("update UserAccount u set u.failedAttempt=?1 where u.nickname=?2")
     @Modifying
-    public void updateFailedAttempt(int attempt, String nickname);
+    void updateFailedAttempt(int attempt, String nickname);
 
 
+    default Optional<UserAccount> findByNicknameOrEmail(String nickname, String email) {
+        Optional<UserAccount> userAccount = findByNickname(nickname);
+        if (!userAccount.isPresent()) {
+            userAccount = findByEmail(email);
+        }
+        return userAccount;
+    }
 }

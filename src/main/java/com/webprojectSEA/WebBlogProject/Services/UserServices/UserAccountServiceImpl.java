@@ -3,7 +3,6 @@ package com.webprojectSEA.WebBlogProject.Services.UserServices;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
 import com.webprojectSEA.WebBlogProject.model.Roles;
 import com.webprojectSEA.WebBlogProject.model.UserAccount;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +11,22 @@ import java.util.*;
 @Service
 public class UserAccountServiceImpl implements UserAccountService{
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private  UserAccountRepository accountRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final  UserAccountRepository accountRepository;
 
     public static final long LOCK_DURATION_TIME = 30000;
     public static final long ATTEMPT_TIME = 3;
 
-    // Constructor Injection
-
+    public UserAccountServiceImpl(PasswordEncoder passwordEncoder, UserAccountRepository accountRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.accountRepository = accountRepository;
+    }
+    @Override
+    public UserAccount getUserById(Long userId) {
+        return accountRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
     @Override
     public UserAccount save(UserAccount userAccount) {
@@ -85,4 +90,28 @@ public class UserAccountServiceImpl implements UserAccountService{
         }
         return false;
     }
-}
+
+    @Override
+    public Optional<UserAccount> findByUsernameOrEmail(String identifier) {
+        Optional<UserAccount> userAccount = accountRepository.findByNickname(identifier);
+        if (userAccount.isEmpty()) {
+            userAccount = accountRepository.findByEmail(identifier);
+        }
+        return userAccount;
+    }
+    @Override
+    public UserAccount ensureRoles(UserAccount userAccount) {
+        if (userAccount.getRoles() == null || userAccount.getRoles().isEmpty()) {
+            userAccount.setRoles(Arrays.asList(Roles.valueOf("USER")));
+        }
+        return userAccount;
+    }
+
+    @Override
+    public UserAccount getUserByUsername(String username) {
+        return accountRepository.findByNickname(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    }
+
+

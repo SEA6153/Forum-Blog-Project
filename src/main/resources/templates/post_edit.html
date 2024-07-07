@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Blog :: Update Post</title>
-    <title>Title</title>
 </head>
 <body>
 
 <div class="container">
     <a th:href="@{/}">Home</a>
-    <form action="#" th:action="@{'/posts/{id}' (id = ${post.id})}" th:object="${post}" method="POST">
+    <form action="#" th:action="@{'/posts/{id}/update' (id = ${post.id})}" th:object="${post}" method="POST" enctype="multipart/form-data">
         <input type="hidden" th:field="*{userAccount}"/>
         <input type="hidden" th:field="*{createdAt}">
         <h2>Update the Post</h2>
@@ -21,18 +20,25 @@
         </div>
         <div>
             <label for="new-post-exp">Explanation</label>
-            <textarea id="new-post-exp" placeholder="Please Enter Your Explanation" th:field="*{explanation}">
-                </textarea>
+            <textarea id="new-post-exp" placeholder="Please Enter Your Explanation" th:field="*{explanation}"></textarea>
         </div>
         <div>
             <label for="category">Category</label>
-            <select id="category" name="category"  th:field="*{category}">
-                <option value="" th:each=" category : ${T(com.webprojectSEA.WebBlogProject.model.Category).values()}"
-                        th:value="${category}" th:text="${category.getCategoryNames()}" ></option>
+            <select id="category" name="category" th:field="*{category}">
+                <option th:each="category : ${T(com.webprojectSEA.WebBlogProject.model.Category).values()}"
+                        th:value="${category}" th:text="${category.getCategoryNames()}"></option>
             </select>
         </div>
+        <div>
+            <label for="current-photo">Current Photo</label>
+            <div th:if="${post.imageUrl}">
+                <img th:src="@{${post.imageUrl}}" alt="Current Photo" style="width: 150px; height: auto;">
+                <input type="checkbox" name="removePhoto" id="removePhoto"> <label for="removePhoto">Remove Current Photo</label>
+            </div>
+            <label for="new-photo">Upload New Photo</label>
+            <input id="new-photo" type="file" name="file">
+        </div>
         <button type="submit">Update Post</button>
-
     </form>
 </div>
 
