@@ -1,4 +1,4 @@
-package com.webprojectSEA.WebBlogProject.model;
+package com.webprojectSEA.WebBlogProject.Model;
 
 import org.springframework.data.jpa.domain.Specification;
 

@@ -5,10 +5,10 @@ import com.webprojectSEA.WebBlogProject.Repostories.PostRepository;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
 import com.webprojectSEA.WebBlogProject.Services.AWSServices.AwsS3Service;
 import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountServiceImpl;
-import com.webprojectSEA.WebBlogProject.model.Category;
-import com.webprojectSEA.WebBlogProject.model.Post;
-import com.webprojectSEA.WebBlogProject.model.PostComment;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
+import com.webprojectSEA.WebBlogProject.Model.Category;
+import com.webprojectSEA.WebBlogProject.Model.Post;
+import com.webprojectSEA.WebBlogProject.Model.PostComment;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 

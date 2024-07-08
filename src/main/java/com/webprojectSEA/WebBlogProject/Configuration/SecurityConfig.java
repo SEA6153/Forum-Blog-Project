@@ -44,15 +44,16 @@ public class SecurityConfig {
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
+
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                .and()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(WHITELIST).permitAll()
                 .antMatchers(HttpMethod.GET, "/posts/*").permitAll()

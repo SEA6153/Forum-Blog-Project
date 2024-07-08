@@ -1,7 +1,7 @@
 package com.webprojectSEA.WebBlogProject.Services.UserServices;
 
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

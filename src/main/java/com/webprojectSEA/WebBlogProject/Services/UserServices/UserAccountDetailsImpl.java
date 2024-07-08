@@ -1,7 +1,7 @@
 package com.webprojectSEA.WebBlogProject.Services.UserServices;
 
-import com.webprojectSEA.WebBlogProject.model.Roles;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
+import com.webprojectSEA.WebBlogProject.Model.Roles;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,8 +1,8 @@
 package com.webprojectSEA.WebBlogProject.Services.PostService;
 
-import com.webprojectSEA.WebBlogProject.model.Category;
-import com.webprojectSEA.WebBlogProject.model.Post;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
+import com.webprojectSEA.WebBlogProject.Model.Category;
+import com.webprojectSEA.WebBlogProject.Model.Post;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

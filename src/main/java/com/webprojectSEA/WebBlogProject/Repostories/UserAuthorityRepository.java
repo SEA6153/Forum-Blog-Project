@@ -1,6 +1,6 @@
 package com.webprojectSEA.WebBlogProject.Repostories;
 
-import com.webprojectSEA.WebBlogProject.model.Authority;
+import com.webprojectSEA.WebBlogProject.Model.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

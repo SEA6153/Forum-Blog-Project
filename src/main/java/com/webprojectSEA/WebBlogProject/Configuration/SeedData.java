@@ -6,7 +6,7 @@ package com.webprojectSEA.WebBlogProject.Configuration;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAuthorityRepository;
 import com.webprojectSEA.WebBlogProject.Services.PostService.PostServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountServiceImpl;
-import com.webprojectSEA.WebBlogProject.model.*;
+import com.webprojectSEA.WebBlogProject.Model.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

@@ -18,7 +18,7 @@ public class AuthSuccessHandler  implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
 
-      Set<String> AuthRoles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        Set<String> AuthRoles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if(AuthRoles.contains("ROLE_ADMIN")){
             response.sendRedirect("/admin/profile");
         }else{

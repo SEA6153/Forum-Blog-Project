@@ -1,6 +1,6 @@
 package com.webprojectSEA.WebBlogProject.Repostories;
 
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

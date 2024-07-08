@@ -3,9 +3,10 @@ package com.webprojectSEA.WebBlogProject.Controller;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAuthorityRepository;
 import com.webprojectSEA.WebBlogProject.Services.AWSServices.AwsS3Service;
+import com.webprojectSEA.WebBlogProject.Services.AuthenticationService.AuthenticationServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.PostService.PostServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountService;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,19 +28,21 @@ public class UserController {
     private final UserAccountService userAccountService;
     private final LoginController loginController;
     private final PostServiceImpl postServiceImpl;
+    private final AuthenticationServiceImpl authenticationService;
 
-    public UserController(UserAccountRepository userAccountRepository, UserAuthorityRepository userAuthorityRepository, AwsS3Service awsS3Service, UserAccountService userAccountService, LoginController loginController, PostServiceImpl postServiceImpl) {
+    public UserController(UserAccountRepository userAccountRepository, UserAuthorityRepository userAuthorityRepository, AwsS3Service awsS3Service, UserAccountService userAccountService, LoginController loginController, PostServiceImpl postServiceImpl, AuthenticationServiceImpl authenticationService) {
         this.userAccountRepository = userAccountRepository;
         this.userAuthorityRepository = userAuthorityRepository;
         this.awsS3Service = awsS3Service;
         this.userAccountService = userAccountService;
         this.loginController = loginController;
         this.postServiceImpl = postServiceImpl;
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping("/user/{nickname}/profile")
     public String userProfile(@PathVariable String nickname, Model model, Authentication authentication) {
-        UserAccount loggedInUser = loginController.getLoggedInUser(authentication);
+        UserAccount loggedInUser = authenticationService.getLoggedInUser(authentication);
         UserAccount userAccount = postServiceImpl.findByNickname(nickname);
 
         model.addAttribute("userAccount", userAccount);

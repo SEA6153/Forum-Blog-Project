@@ -1,12 +1,13 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
 import com.webprojectSEA.WebBlogProject.Services.AWSServices.AwsS3Service;
+import com.webprojectSEA.WebBlogProject.Services.AuthenticationService.AuthenticationServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.CommentServices.CommentServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.PostService.PostServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountServiceImpl;
-import com.webprojectSEA.WebBlogProject.model.Category;
-import com.webprojectSEA.WebBlogProject.model.Post;
-import com.webprojectSEA.WebBlogProject.model.PostComment;
+import com.webprojectSEA.WebBlogProject.Model.Category;
+import com.webprojectSEA.WebBlogProject.Model.Post;
+import com.webprojectSEA.WebBlogProject.Model.PostComment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,13 +35,15 @@ public class CommentController {
     private final LoginController loginController;
     private final PostServiceImpl postService;
     private final UserAccountServiceImpl userAccountService;
+    private final AuthenticationServiceImpl authenticationService;
 
-    public CommentController(CommentServiceImpl commentService, AwsS3Service awsS3Service, LoginController loginController, PostServiceImpl postService, UserAccountServiceImpl userAccountService) {
+    public CommentController(CommentServiceImpl commentService, AwsS3Service awsS3Service, LoginController loginController, PostServiceImpl postService, UserAccountServiceImpl userAccountService, AuthenticationServiceImpl authenticationService) {
         this.commentService = commentService;
         this.awsS3Service = awsS3Service;
         this.loginController = loginController;
         this.postService = postService;
         this.userAccountService = userAccountService;
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping("my/comments")
@@ -228,7 +231,7 @@ public class CommentController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
-        String loggedInUserNicknameOrEmail = loginController.getLoggedInUserNickname(authentication);
+        String loggedInUserNicknameOrEmail = authenticationService.getLoggedInUserNickname(authentication);
         if (loggedInUserNicknameOrEmail == null) {
             return "redirect:/login";
         }
@@ -238,27 +241,13 @@ public class CommentController {
         return "redirect:" + referer;
     }
 
-    @PostMapping("comments/{id}/dislike")
-    public String dislikeComment(@PathVariable Long id, Authentication authentication, HttpServletRequest request) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/login";
-        }
-        String loggedInUserNicknameOrEmail = loginController.getLoggedInUserNickname(authentication);
-        if (loggedInUserNicknameOrEmail == null) {
-            return "redirect:/login";
-        }
-        commentService.dislikeComment(id, loggedInUserNicknameOrEmail);
-
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
-    }
 
     @PostMapping("comments/{id}/unlike")
     public String unlikeComment(@PathVariable Long id, Authentication authentication, HttpServletRequest request) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
-        String loggedInUserNicknameOrEmail = loginController.getLoggedInUserNickname(authentication);
+        String loggedInUserNicknameOrEmail = authenticationService.getLoggedInUserNickname(authentication);
         if (loggedInUserNicknameOrEmail == null) {
             return "redirect:/login";
         }
@@ -268,20 +257,6 @@ public class CommentController {
         return "redirect:" + referer;
     }
 
-    @PostMapping("comments/{id}/undislike")
-    public String undislikeComment(@PathVariable Long id, Authentication authentication, HttpServletRequest request) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/login";
-        }
-        String loggedInUserNicknameOrEmail = loginController.getLoggedInUserNickname(authentication);
-        if (loggedInUserNicknameOrEmail == null) {
-            return "redirect:/login";
-        }
-        commentService.undislikeComment(id, loggedInUserNicknameOrEmail);
-
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
-    }
 
     private String getTimeAgo(LocalDateTime createdAt) {
         LocalDateTime now = LocalDateTime.now();

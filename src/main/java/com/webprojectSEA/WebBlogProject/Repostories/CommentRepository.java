@@ -1,9 +1,9 @@
 package com.webprojectSEA.WebBlogProject.Repostories;
 
-import com.webprojectSEA.WebBlogProject.model.Category;
-import com.webprojectSEA.WebBlogProject.model.Post;
-import com.webprojectSEA.WebBlogProject.model.PostComment;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
+import com.webprojectSEA.WebBlogProject.Model.Category;
+import com.webprojectSEA.WebBlogProject.Model.Post;
+import com.webprojectSEA.WebBlogProject.Model.PostComment;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

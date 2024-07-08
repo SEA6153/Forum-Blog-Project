@@ -1,7 +1,7 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

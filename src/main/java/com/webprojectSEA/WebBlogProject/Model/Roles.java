@@ -1,4 +1,4 @@
-package com.webprojectSEA.WebBlogProject.model;
+package com.webprojectSEA.WebBlogProject.Model;
 
 import lombok.Getter;
 

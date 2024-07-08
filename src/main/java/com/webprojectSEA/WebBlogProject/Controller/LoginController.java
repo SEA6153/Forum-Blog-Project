@@ -1,7 +1,7 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

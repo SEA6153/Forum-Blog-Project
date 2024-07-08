@@ -25,7 +25,7 @@
         <div>
             <label for="category">Category</label>
             <select id="category" name="category" th:field="*{category}">
-                <option value="" th:each="category : ${T(com.webprojectSEA.WebBlogProject.model.Category).values()}"
+                <option value="" th:each="category : ${T(com.webprojectSEA.WebBlogProject.Model.Category).values()}"
                         th:value="${category}" th:text="${category.getCategoryNames()}"></option>
             </select>
         </div>

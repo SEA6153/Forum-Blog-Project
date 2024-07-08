@@ -13,7 +13,6 @@
     </div>
     <div th:if="${isOwnProfile}">
         <form method="post" enctype="multipart/form-data" th:action="@{'/user/' + ${userAccount.nickname} + '/profile'}">
-            <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
             <input type="file" name="file" required/>
             <button type="submit">Profil Resminizi Yükleyin</button>
         </form>

@@ -1,4 +1,4 @@
-package com.webprojectSEA.WebBlogProject.Services.AuhtServices;
+package com.webprojectSEA.WebBlogProject.Services.AuhtorityServices;
 
 import com.webprojectSEA.WebBlogProject.Model.Authority;
 import com.webprojectSEA.WebBlogProject.Model.Roles;

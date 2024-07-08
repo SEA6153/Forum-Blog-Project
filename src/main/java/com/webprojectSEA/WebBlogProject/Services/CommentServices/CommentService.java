@@ -1,7 +1,7 @@
 package com.webprojectSEA.WebBlogProject.Services.CommentServices;
 
-import com.webprojectSEA.WebBlogProject.model.Category;
-import com.webprojectSEA.WebBlogProject.model.PostComment;
+import com.webprojectSEA.WebBlogProject.Model.Category;
+import com.webprojectSEA.WebBlogProject.Model.PostComment;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;

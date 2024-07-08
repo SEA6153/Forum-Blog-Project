@@ -1,8 +1,8 @@
 package com.webprojectSEA.WebBlogProject.Repostories;
 
-import com.webprojectSEA.WebBlogProject.model.Post;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
-import com.webprojectSEA.WebBlogProject.model.UserLikeDislike;
+import com.webprojectSEA.WebBlogProject.Model.Post;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
+import com.webprojectSEA.WebBlogProject.Model.UserLikeDislike;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

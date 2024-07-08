@@ -1,16 +1,18 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
+import com.webprojectSEA.WebBlogProject.Model.Category;
+import com.webprojectSEA.WebBlogProject.Model.Post;
+import com.webprojectSEA.WebBlogProject.Model.PostComment;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import com.webprojectSEA.WebBlogProject.Repostories.CommentRepository;
 import com.webprojectSEA.WebBlogProject.Repostories.PostRepository;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
+import com.webprojectSEA.WebBlogProject.Services.AuthenticationService.AuthenticationServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.CommentServices.CommentServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.PostService.PostServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountServiceImpl;
-import com.webprojectSEA.WebBlogProject.model.Category;
-import com.webprojectSEA.WebBlogProject.model.Post;
-import com.webprojectSEA.WebBlogProject.model.PostComment;
-import com.webprojectSEA.WebBlogProject.model.UserAccount;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,20 +33,22 @@ public class PostController {
 
     private final PostServiceImpl postServiceImpl;
     private final UserAccountRepository userAccountRepository;
-    private final LoginController loginController;
+    private final AuthenticationServiceImpl authenticationService;
     private final CommentRepository commentRepository;
     private final UserAccountServiceImpl userServiceImpl;
     private final PostRepository postRepository;
     private final CommentServiceImpl commentService;
+    private final LoginController loginController;
 
-    public PostController(PostServiceImpl postServiceImpl, UserAccountRepository userAccountRepository, LoginController loginController, CommentRepository commentRepository, UserAccountServiceImpl userServiceImpl, PostRepository postRepository, CommentServiceImpl commentService) {
+    public PostController(PostServiceImpl postServiceImpl, UserAccountRepository userAccountRepository, AuthenticationServiceImpl authenticationService, CommentRepository commentRepository, UserAccountServiceImpl userServiceImpl, PostRepository postRepository, CommentServiceImpl commentService, LoginController loginController) {
         this.postServiceImpl = postServiceImpl;
         this.userAccountRepository = userAccountRepository;
-        this.loginController = loginController;
+        this.authenticationService = authenticationService;
         this.commentRepository = commentRepository;
         this.userServiceImpl = userServiceImpl;
         this.postRepository = postRepository;
         this.commentService = commentService;
+        this.loginController = loginController;
     }
 
     @GetMapping("/posts")
@@ -70,6 +74,7 @@ public class PostController {
             try {
                 categoryEnum = Category.valueOf(category.toUpperCase());
             } catch (IllegalArgumentException e) {
+                // Geçersiz kategori durumu için bir şey yapılabilir
             }
         }
 
@@ -83,14 +88,14 @@ public class PostController {
 
         // Kullanıcı bilgisini modele ekle
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated()) {
-            UserAccount userAccount = userServiceImpl.findByUsernameOrEmail(auth.getName()) .orElseThrow(() -> new UsernameNotFoundException("Wrong Username or E-mail"));
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            UserAccount userAccount = userServiceImpl.findByUsernameOrEmail(auth.getName())
+                    .orElseThrow(() -> new UsernameNotFoundException("Wrong Username or E-mail"));
             model.addAttribute("userAccount", userAccount);
         }
 
         return "form";
     }
-
 
     @GetMapping("posts/{id}")
     public String getPost(@PathVariable Long id, Model model, Authentication authentication) {
@@ -105,7 +110,7 @@ public class PostController {
             }
             boolean isPostOwner = false;
             UserAccount userAccount = null;
-            Long loggedInUserId = loginController.getLoggedInUserId(authentication);
+            Long loggedInUserId = null;
 
             if (authentication != null && authentication.isAuthenticated()) {
                 String currentUsername = authentication.getName();
@@ -116,6 +121,7 @@ public class PostController {
                     loggedInUserId = userAccount.getId();
                 }
             }
+
             model.addAttribute("timeAgo", timeAgo);
             model.addAttribute("postComments", postComments);
             model.addAttribute("isPostOwner", isPostOwner);
@@ -123,12 +129,12 @@ public class PostController {
             model.addAttribute("userAccountId", loggedInUserId);
             model.addAttribute("post", post);
 
-
             return "post"; // post.html
         } else {
             return "404";
         }
     }
+
     private String getTimeAgo(LocalDateTime createdAt) {
         LocalDateTime now = LocalDateTime.now();
         long days = ChronoUnit.DAYS.between(createdAt, now);
@@ -221,11 +227,9 @@ public class PostController {
                 existingPost.setExplanation(post.getExplanation());
                 existingPost.setCategory(post.getCategory());
 
-
                 if (removePhoto) {
                     existingPost.setImageUrl(null);
                 }
-
 
                 if (file != null && !file.isEmpty()) {
                     String photoUrl = savePhoto(file);
@@ -241,9 +245,32 @@ public class PostController {
             return "404";
         }
     }
+
+    @PostMapping("/posts/{id}/delete")
+    @PreAuthorize("isAuthenticated()")
+    public String deletePost(@PathVariable Long id, Authentication authentication) {
+        Long loggedInUserId = loginController.getLoggedInUserId(authentication);
+
+        Optional<Post> optionalPost = postServiceImpl.getById(id);
+
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+
+            if (post.getUserAccount().getId().equals(loggedInUserId)) {
+                postServiceImpl.deletePost(id, loggedInUserId);
+                return "redirect:/";
+            } else {
+                return "403";
+            }
+        } else {
+            return "404";
+        }
+    }
+
     private String savePhoto(MultipartFile photo) throws IOException {
         return "/path/to/photo/" + photo.getOriginalFilename();
     }
+
     @PostMapping("/{postId}/comments/{commentId}/delete")
     @PreAuthorize("isAuthenticated()")
     public String deleteComment(@PathVariable Long postId, @PathVariable Long commentId, Authentication authentication, Model model) {
@@ -264,8 +291,6 @@ public class PostController {
         }
         return "redirect:/posts/" + postId;
     }
-
-
 
     @GetMapping("/my/posts")
     @PreAuthorize("isAuthenticated()")
@@ -292,7 +317,7 @@ public class PostController {
             }
         }
 
-        UserAccount loggedInUser = loginController.getLoggedInUser(authentication);
+        UserAccount loggedInUser = authenticationService.getLoggedInUser(authentication);
         List<Post> userPosts = postServiceImpl.getPostsByUserId(loggedInUser.getId(), sortField, sortDirection, searchQuery, categoryEnum);
         Long loggedInUserId = loginController.getLoggedInUserId(authentication);
         model.addAttribute("userPosts", userPosts);
@@ -306,14 +331,12 @@ public class PostController {
         return "my_posts";
     }
 
-
-
     @PostMapping("posts/{id}/like")
     public String likePost(@PathVariable Long id, Authentication authentication, HttpServletRequest request) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
-        String loggedInUserNicknameOrEmail = loginController.getLoggedInUserNickname(authentication);
+        String loggedInUserNicknameOrEmail = authenticationService.getLoggedInUserNickname(authentication);
         if (loggedInUserNicknameOrEmail == null) {
             return "redirect:/login";
         }
@@ -340,7 +363,7 @@ public class PostController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
-        String loggedInUserNicknameOrEmail = loginController.getLoggedInUserNickname(authentication);
+        String loggedInUserNicknameOrEmail = authenticationService.getLoggedInUserNickname(authentication);
         if (loggedInUserNicknameOrEmail == null) {
             return "redirect:/login";
         }
@@ -361,7 +384,4 @@ public class PostController {
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
-    }
-
-
-
+}
