@@ -33,15 +33,15 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, Authentication authentication) {
-        String loggedInUserNicknameOrEmail = authenticationService.getLoggedInUserNickname(authentication);
-        if (loggedInUserNicknameOrEmail != null) {
-            Optional<UserAccount> userAccount = userAccountRepository.findByNicknameOrEmail(loggedInUserNicknameOrEmail, loggedInUserNicknameOrEmail);
-            userAccount.ifPresent(user -> model.addAttribute("userAccount", user));
+        String loggedInUserEmail = authenticationService.getLoggedInUserNickname(authentication); // Kullanıcının e-postasını al
+        if (loggedInUserEmail != null) {
+            Optional<UserAccount> userAccount = userAccountRepository.findByEmail(loggedInUserEmail); // E-posta ile kullanıcıyı bul
+            userAccount.ifPresent(user -> model.addAttribute("userAccount", user)); // Kullanıcıyı modele ekle
         }
 
         List<Post> post = postServiceImpl.getAll();
         model.addAttribute("post", post);
         model.addAttribute("categories", Category.values());
-        return "form";
+        return "form"; // Dönülecek Thymeleaf şablonu
     }
 }

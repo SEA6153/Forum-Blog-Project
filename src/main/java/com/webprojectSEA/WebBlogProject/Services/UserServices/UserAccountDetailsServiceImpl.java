@@ -24,7 +24,6 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserAccount account = userAccountRepository.findByEmail(username)
-                .or(() -> userAccountRepository.findByNickname(username))
                 .orElseThrow(() -> new UsernameNotFoundException("Wrong Username or E-mail"));
 
         List<GrantedAuthority> grantedAuthorities = account.getRoles()

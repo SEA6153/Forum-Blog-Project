@@ -46,6 +46,7 @@ public class UserController {
         UserAccount userAccount = postServiceImpl.findByNickname(nickname);
 
         model.addAttribute("userAccount", userAccount);
+        model.addAttribute("loggedInuser", loggedInUser);
 
         if (loggedInUser != null && loggedInUser.getNickname().equals(nickname)) {
             model.addAttribute("isOwnProfile", true);

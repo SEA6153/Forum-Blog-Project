@@ -2,12 +2,13 @@
     display: flex;
     width: 100%;
     height: 15%;
-    color: transparent;
+    color: #000000;
+    background-color: transparent;
     position: fixed;
     bottom: 0;
     left: 0;
-    z-index: 12;
     gap: 5rem;
+    z-index: 30;
 }
 
 .footerup {
@@ -15,19 +16,25 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 20%;
+    height: max-content;
     color: transparent;
     left:0;
-    bottom: 15%;
+    bottom: 16vh;
     background-color: transparent;
     gap: 5rem;
     justify-content: center;
 }
 .footer1up{
-    color: white;
+    color: rgb(255, 255, 255);
     flex: 1;
     gap: 0.5em;
 
+}
+.footer2impLogin{
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
 }
 .footer2up{
     color: white;
@@ -50,8 +57,7 @@
     flex: 1;
     gap: 1rem;
     justify-content: center;
-    align-items: center;
-    margin: auto;
+    align-items: flex-end;
     opacity: 0;
     visibility: hidden;
     z-index: 11;
@@ -59,6 +65,7 @@
 
 
 .footer1{
+    background-color: transparent;
     color: white;
     flex-direction: row;
     flex: 1;
@@ -105,14 +112,14 @@
     transition: var(--btn-transition);
     box-sizing: border-box;
     position: relative;
-    background: tra;
+    background: transparent;
 }
 
 .ui-btn span::before {
     box-sizing: border-box;
     position: absolute;
     content: "";
-    background: inherit;
+    background: transparent;
 }
 
 .ui-btn:hover, .ui-btn:focus {
@@ -244,12 +251,12 @@
     gap: 1rem;
 }
 .footer3 {
-    position: absolute;
-    height: max-content;
+    position: relative;
+    height: auto;
     width: max-content;
     display: flex;
     flex-direction: column;
-    gap: 0.4em;
+    gap: 0.3em;
     animation: scaleAnimation 5s forwards;
 
 }
@@ -327,8 +334,8 @@
     position: relative;
     width: 75px;
     height: 75px;
-    top: -90px;
-    right: 40px;
+    top: -80px;
+    right: 45px;
     clip-path: polygon(0% 0%, 50% 100%, 100% 50%);
     background: linear-gradient( 150deg, #cc39a4 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0) 100% );
     opacity: 0;
@@ -342,8 +349,8 @@
     position: relative;
     width: 75px;
     height: 75px;
-    top: -85px;
-    right: -15px;
+    top: -80px;
+    right: 0px;
     clip-path: polygon(100% 0%, 50% 100%, 0% 50%);
     background: linear-gradient( 210deg, #03A9F4 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0) 100% );
     opacity: 0;
@@ -355,8 +362,8 @@
     position: relative;
     width: 75px;
     height: 75px;
-    top: -20px;
-    right: 40px;
+    top: -30px;
+    right: 45px;
     clip-path: polygon(50% 0%, 100% 50%, 0% 100%);
     background: linear-gradient( 45deg, #7289da 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0) 100% );
     opacity: 0;
@@ -368,8 +375,8 @@
     position: relative;
     width: 75px;
     height: 75px;
-    top: -10px;
-    right: -15px;
+    top: -25px;
+    right: 0px;
     clip-path: polygon(50% 0%, 100% 100%, 0% 50%);
     background: linear-gradient( 320deg, #f14336 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0) 100% );
     opacity: 0;
@@ -387,20 +394,20 @@
 .up {
     display: flex;
     flex-direction: row;
-    gap: 0.4em;
+    gap: 0.3em;
 }
 
 .down {
     display: flex;
     flex-direction: row;
-    gap: 0.4em;
+    gap: 0.3em;
 }
 .card1 {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     outline: none;
     border: none;
-    background: white;
+    background: #fec195;
     border-radius: 60px 5px 5px 5px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     transition: .2s ease-in-out;
@@ -408,17 +415,17 @@
 }
 
 .instagram {
-    margin-top: 1.4em;
-    margin-left: 0.8em;
+    margin-top: 0.6em;
+    margin-left: 0.2em;
     fill: #cc39a4;
 }
 
 .card2 {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     outline: none;
-    border: white;
-    background: white;
+    border: none;
+    background: #fec195;
     border-radius: 5px 60px 5px 5px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     transition: .2s ease-in-out;
@@ -426,17 +433,17 @@
 }
 
 .facebook {
-    margin-top: 1.4em;
+    margin-top: 0.7em;
     margin-left: -0.8em;
     fill: #03A9F4;
 }
 
 .card3 {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     outline: none;
     border: none;
-    background: white;
+    background: #fec195;
     border-radius: 5px 5px 5px 60px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     transition: .2s ease-in-out;
@@ -444,16 +451,16 @@
 }
 
 .discord {
-    margin-top: 0.7em;
-    margin-left: 0.8em;
+    margin-top: 0em;
+    margin-left: 0.2em;
 }
 
 .card4 {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     outline: none;
     border: none;
-    background: white;
+    background: #fec195;
     border-radius: 5px 5px 60px 5px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     transition: .2s ease-in-out;
@@ -461,8 +468,8 @@
 }
 
 .gmail {
-    margin-top: 0.8em;
-    margin-left: -0.8em;
+    margin-top: 0.2em;
+    margin-left: -0.6em;
     fill: #f14336;
 }
 .card1:hover{

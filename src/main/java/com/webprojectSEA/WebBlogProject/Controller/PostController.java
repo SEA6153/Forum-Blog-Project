@@ -5,7 +5,6 @@ import com.webprojectSEA.WebBlogProject.Model.Post;
 import com.webprojectSEA.WebBlogProject.Model.PostComment;
 import com.webprojectSEA.WebBlogProject.Model.UserAccount;
 import com.webprojectSEA.WebBlogProject.Repostories.CommentRepository;
-import com.webprojectSEA.WebBlogProject.Repostories.PostRepository;
 import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
 import com.webprojectSEA.WebBlogProject.Services.AuthenticationService.AuthenticationServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.CommentServices.CommentServiceImpl;
@@ -36,19 +35,32 @@ public class PostController {
     private final AuthenticationServiceImpl authenticationService;
     private final CommentRepository commentRepository;
     private final UserAccountServiceImpl userServiceImpl;
-    private final PostRepository postRepository;
     private final CommentServiceImpl commentService;
     private final LoginController loginController;
 
-    public PostController(PostServiceImpl postServiceImpl, UserAccountRepository userAccountRepository, AuthenticationServiceImpl authenticationService, CommentRepository commentRepository, UserAccountServiceImpl userServiceImpl, PostRepository postRepository, CommentServiceImpl commentService, LoginController loginController) {
+    public PostController(PostServiceImpl postServiceImpl,
+                          UserAccountRepository userAccountRepository,
+                          AuthenticationServiceImpl authenticationService,
+                          CommentRepository commentRepository, UserAccountServiceImpl userServiceImpl,
+                          CommentServiceImpl commentService, LoginController loginController) {
         this.postServiceImpl = postServiceImpl;
         this.userAccountRepository = userAccountRepository;
         this.authenticationService = authenticationService;
         this.commentRepository = commentRepository;
         this.userServiceImpl = userServiceImpl;
-        this.postRepository = postRepository;
         this.commentService = commentService;
         this.loginController = loginController;
+    }
+
+    @GetMapping("/home")
+    public String getHomePage(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            UserAccount userAccount = userServiceImpl.findByUsernameOrEmail(auth.getName())
+                    .orElseThrow(() -> new UsernameNotFoundException("Wrong Username or E-mail"));
+            model.addAttribute("userAccount", userAccount);
+        }
+        return "home";
     }
 
     @GetMapping("/posts")
@@ -114,7 +126,7 @@ public class PostController {
 
             if (authentication != null && authentication.isAuthenticated()) {
                 String currentUsername = authentication.getName();
-                userAccount = userAccountRepository.findByNickname(currentUsername).orElse(null);
+                userAccount = userAccountRepository.findByEmail(currentUsername).orElse(null);
 
                 if (userAccount != null) {
                     isPostOwner = post.getUserAccount().getNickname().equals(currentUsername);
@@ -129,7 +141,7 @@ public class PostController {
             model.addAttribute("userAccountId", loggedInUserId);
             model.addAttribute("post", post);
 
-            return "post"; // post.html
+            return "post";
         } else {
             return "404";
         }
@@ -170,6 +182,11 @@ public class PostController {
         Long loggedInUserId = loginController.getLoggedInUserId(authentication);
         Optional<UserAccount> optionalUserAccount = userAccountRepository.findById(loggedInUserId);
         if (optionalUserAccount.isPresent()) {
+            if (authentication != null && authentication.isAuthenticated()) {
+                String currentUsername = authentication.getName();
+               UserAccount userAccount = userAccountRepository.findByEmail(currentUsername).orElse(null);
+            model.addAttribute("userAccount", userAccount);
+            }
             Post post = new Post();
             post.setUserAccount(optionalUserAccount.get());
             model.addAttribute("post", post);
@@ -320,6 +337,8 @@ public class PostController {
         UserAccount loggedInUser = authenticationService.getLoggedInUser(authentication);
         List<Post> userPosts = postServiceImpl.getPostsByUserId(loggedInUser.getId(), sortField, sortDirection, searchQuery, categoryEnum);
         Long loggedInUserId = loginController.getLoggedInUserId(authentication);
+        String currentUserName = authentication.getName();
+        UserAccount loggedInUsername = userAccountRepository.findByEmail(currentUserName).orElseThrow(() -> new RuntimeException("Username Not Found!"));
         model.addAttribute("userPosts", userPosts);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDirection", sortDirection);
@@ -327,6 +346,7 @@ public class PostController {
         model.addAttribute("category", categoryEnum);
         model.addAttribute("categories", Category.values());
         model.addAttribute("userAccountId", loggedInUserId);
+        model.addAttribute("loggedInUsername", loggedInUsername);
 
         return "my_posts";
     }

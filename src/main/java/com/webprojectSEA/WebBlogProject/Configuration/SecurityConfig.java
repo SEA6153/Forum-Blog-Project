@@ -1,6 +1,7 @@
 package com.webprojectSEA.WebBlogProject.Configuration;
 
 import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountDetailsServiceImpl;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @EnableWebSecurity
 @Configuration
+@EnableAutoConfiguration
 public class SecurityConfig {
 
     private static final String[] WHITELIST = {
@@ -21,15 +23,19 @@ public class SecurityConfig {
             "/register",
             "/posts/{id}",
             "/css/**",
-            "/posts"
+            "/posts",
+            "/img/**",
+            "/home"
     };
 
     private final UserAccountDetailsServiceImpl userDetailsService;
     private final AuthSuccessHandler authSuccessHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    public SecurityConfig(UserAccountDetailsServiceImpl userDetailsService, AuthSuccessHandler authSuccessHandler) {
+    public SecurityConfig(UserAccountDetailsServiceImpl userDetailsService, AuthSuccessHandler authSuccessHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.authSuccessHandler = authSuccessHandler;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
     }
 
     @Bean
@@ -68,8 +74,11 @@ public class SecurityConfig {
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
                 .and()
-                .httpBasic();
+                .httpBasic().authenticationEntryPoint(customAuthenticationEntryPoint);
 
         return http.build();
     }

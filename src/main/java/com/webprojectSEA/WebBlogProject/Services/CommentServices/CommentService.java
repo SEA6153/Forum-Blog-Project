@@ -18,7 +18,7 @@ public interface CommentService {
     public List<PostComment> findCommentsByUsername(String username);
 
 
-    void addComment(Long postId, String username, String text, String photoUrl, String email, Long userId);
+    void addComment(Long postId, String text, String photoUrl, String email, Long userId);
 
     void updateComment(Long id, String text, String photoUrl);
 

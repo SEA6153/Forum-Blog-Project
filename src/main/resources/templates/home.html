@@ -6,24 +6,16 @@
 >
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE-edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link type="text/html" />
-    <link
-            href="css/LoginPageCss/LoginPage.css"
-            type="text/css"
-            rel="stylesheet"
-    />
+    <base href="/" />
     <link href="css/body.css" type="text/css" rel="stylesheet" />
     <link href="css/header.css" type="text/css" rel="stylesheet" />
-    <link
-            href="css/LoginPageCss/footerLoginCss.css"
-            type="text/css"
-            rel="stylesheet"
-    />
+    <link href="css/footer.css" type="text/css" rel="stylesheet" />
     <link href="css/footerimp.css" type="text/css" rel="stylesheet" />
-    <base href="/" />
-    <title>Register</title>
+    <title>BLOG :: Posts</title>
+    <link type="text/html" />
+    <title>Our Website</title>
 </head>
 <body>
 <header>
@@ -34,6 +26,7 @@
                     type="button"
                     id="homeButton"
                     onclick="window.location.href='/home'"
+
             >
                 <strong>HOME</strong>
                 <div id="container-stars">
@@ -70,7 +63,6 @@
         <div class="headerInner4">
             <a th:href="@{/posts}" class="headerbutton1">
                 <span>Discussion Form</span><i></i>
-
             </a>
         </div>
         <div class="headerInner6">
@@ -84,7 +76,7 @@
                 </a>
             </div>
             <div class="userProfileName" th:if="${userAccount != null}">
-                <label class="hiLabel"><span th:text="${userAccount.nickname}">Username</span></label>
+                <label class="hiLabel">Hi, <span th:text="${userAccount.nickname}">Username</span></label>
             </div>
         </div>
         <div class="headerInner7" sec:authorize="isAuthenticated()">
@@ -102,6 +94,10 @@
             </form>
         </div>
     </div>
+
+
+
+
 </header>
 <div class="box-of-star1">
     <div class="star star-position1"></div>
@@ -289,98 +285,22 @@
     <div class="star star-position183"></div>
     <div class="star star-position184"></div>
 </div>
-<div class="bodycontainerLogin">
-    <div class="container">
-        <h1 class="loginText">Register</h1>
-        <form
-                th:action="@{/register}"
-                th:object="${userRegistrationDTO}"
-                method="post"
-        >
-            <div class="form-group">
-                <label for="firstname">FirstName</label>
-                <input
-                        id="firstname"
-                        type="text"
-                        th:field="*{firstName}"
-                        name="firstname"
-                        placeholder="First Name"
-                />
-                <span
-                        th:if="${#fields.hasErrors('firstName')}"
-                        th:errors="*{firstName}"
-                >Invalid First Name</span
-                >
-            </div>
-            <div class="form-group">
-                <label for="lastname">LastName</label>
-                <input
-                        id="lastname"
-                        type="text"
-                        th:field="*{lastName}"
-                        name="lastname"
-                        placeholder="Last Name"
-                />
-                <span
-                        th:if="${#fields.hasErrors('lastName')}"
-                        th:errors="*{lastName}"
-                >Invalid Last Name</span
-                >
-            </div>
-
-            <div class="form-group">
-                <label for="nickname">NickName</label>
-                <input
-                        id="nickname"
-                        type="text"
-                        th:field="*{nickname}"
-                        name="nickname"
-                        placeholder="Nickname"
-                />
-                <span
-                        th:if="${#fields.hasErrors('nickname')}"
-                        th:errors="*{nickname}"
-                >Invalid Nickname</span
-                >
-            </div>
-            <div class="form-group">
-                <label for="email">E-Mail</label>
-                <input
-                        id="email"
-                        type="text"
-                        th:field="*{email}"
-                        name="email"
-                        placeholder="E-Mail"
-                />
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                >Invalid Email</span
-                >
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input
-                        id="password"
-                        type="password"
-                        th:field="*{password}"
-                        name="password"
-                        placeholder="Password"
-                />
-                <span
-                        th:if="${#fields.hasErrors('password')}"
-                        th:errors="*{password}"
-                >Invalid Password</span
-                >
-            </div>
-
-
-            <button class="submitLoginButton" type="submit">Register!</button>
-        </form>
-        <br />
-        <div class="links">  <a  th:href="@{'/home'}">HOME</a></div>
-
+<div class="bodycontainer" style="background-color: transparent">
+    <div data-js="astro" class="astronautdiv" style="margin-top: 120px">
+        <div class="head"></div>
+        <div class="arm arm-left"></div>
+        <div class="arm arm-right"></div>
+        <div class="bodyastro">
+            <div class="panel"></div>
+        </div>
+        <div class="leg leg-left"></div>
+        <div class="leg leg-right"></div>
+        <div class="schoolbag"></div>
     </div>
+    <div class="greetings">
+        <button class="greetButton" data-text="Awesome">
+            <span class="actual-text">&nbsp;Greetings Space Traveler! You've landed in the hearth of the cosmos. May your cosmic journey be filled with marvel and discovery&nbsp;</span></button></div>
 </div>
-
 <div class="footerup">
     <div class="footer1up"></div>
     <div class="footer2up"></div>
@@ -388,116 +308,59 @@
         <div class="footer3" id="footer3">
             <div class="up">
                 <button class="card1" id="instagramButton">
-                    <svg
-                            class="instagram"
-                            fill-rule="nonzero"
-                            height="30px"
-                            width="30px"
-                            viewBox="0,0,256,256"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <g
-                                style="mix-blend-mode: normal"
-                                text-anchor="none"
-                                font-size="none"
-                                font-weight="none"
-                                font-family="none"
-                                stroke-dashoffset="0"
-                                stroke-dasharray=""
-                                stroke-miterlimit="10"
-                                stroke-linejoin="miter"
-                                stroke-linecap="butt"
-                                stroke-width="1"
-                                stroke="none"
-                                fill-rule="nonzero"
-                        >
-                            <g transform="scale(8,8)">
-                                <path
-                                        d="M11.46875,5c-3.55078,0 -6.46875,2.91406 -6.46875,6.46875v9.0625c0,3.55078 2.91406,6.46875 6.46875,6.46875h9.0625c3.55078,0 6.46875,-2.91406 6.46875,-6.46875v-9.0625c0,-3.55078 -2.91406,-6.46875 -6.46875,-6.46875zM11.46875,7h9.0625c2.47266,0 4.46875,1.99609 4.46875,4.46875v9.0625c0,2.47266 -1.99609,4.46875 -4.46875,4.46875h-9.0625c-2.47266,0 -4.46875,-1.99609 -4.46875,-4.46875v-9.0625c0,-2.47266 1.99609,-4.46875 4.46875,-4.46875zM21.90625,9.1875c-0.50391,0 -0.90625,0.40234 -0.90625,0.90625c0,0.50391 0.40234,0.90625 0.90625,0.90625c0.50391,0 0.90625,-0.40234 0.90625,-0.90625c0,-0.50391 -0.40234,-0.90625 -0.90625,-0.90625zM16,10c-3.30078,0 -6,2.69922 -6,6c0,3.30078 2.69922,6 6,6c3.30078,0 6,-2.69922 6,-6c0,-3.30078 -2.69922,-6 -6,-6zM16,12c2.22266,0 4,1.77734 4,4c0,2.22266 -1.77734,4 -4,4c-2.22266,0 -4,-1.77734 -4,-4c0,-2.22266 1.77734,-4 4,-4z"
-                                ></path>
-                            </g>
-                        </g>
-                    </svg>
+                    <svg class="instagram" fill-rule="nonzero" height="30px" width="30px" viewBox="0,0,256,256" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g style="mix-blend-mode: normal" text-anchor="none" font-size="none" font-weight="none" font-family="none" stroke-dashoffset="0" stroke-dasharray="" stroke-miterlimit="10" stroke-linejoin="miter" stroke-linecap="butt" stroke-width="1" stroke="none" fill-rule="nonzero"><g transform="scale(8,8)"><path d="M11.46875,5c-3.55078,0 -6.46875,2.91406 -6.46875,6.46875v9.0625c0,3.55078 2.91406,6.46875 6.46875,6.46875h9.0625c3.55078,0 6.46875,-2.91406 6.46875,-6.46875v-9.0625c0,-3.55078 -2.91406,-6.46875 -6.46875,-6.46875zM11.46875,7h9.0625c2.47266,0 4.46875,1.99609 4.46875,4.46875v9.0625c0,2.47266 -1.99609,4.46875 -4.46875,4.46875h-9.0625c-2.47266,0 -4.46875,-1.99609 -4.46875,-4.46875v-9.0625c0,-2.47266 1.99609,-4.46875 4.46875,-4.46875zM21.90625,9.1875c-0.50391,0 -0.90625,0.40234 -0.90625,0.90625c0,0.50391 0.40234,0.90625 0.90625,0.90625c0.50391,0 0.90625,-0.40234 0.90625,-0.90625c0,-0.50391 -0.40234,-0.90625 -0.90625,-0.90625zM16,10c-3.30078,0 -6,2.69922 -6,6c0,3.30078 2.69922,6 6,6c3.30078,0 6,-2.69922 6,-6c0,-3.30078 -2.69922,-6 -6,-6zM16,12c2.22266,0 4,1.77734 4,4c0,2.22266 -1.77734,4 -4,4c-2.22266,0 -4,-1.77734 -4,-4c0,-2.22266 1.77734,-4 4,-4z"></path></g></g></svg>
                     <div class="light-insta"></div>
                 </button>
                 <button class="card2" id="facebookButton">
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            height="24"
-                            class="facebook"
-                            width="24"
-                    >
-                        <path
-                                d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z"
-                        ></path>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" class="facebook" width="24">
+                        <path d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z"></path></svg>
                     <div class="light-face"></div>
                 </button>
             </div>
             <div class="down">
                 <button class="card3" id="discordButton">
-                    <svg
-                            width="30"
-                            class="discord"
-                            height="30"
-                            viewBox="0 0 48 48"
-                            id="b"
-                            xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                                class="c"
-                                d="m17.59,34.1733c-.89,1.3069-1.8944,2.6152-2.91,3.8267-7.38-.21-10.18-5-10.18-5,.1049-6.7869,1.7496-13.4614,4.81-19.52,2.6902-2.1046,5.9681-3.3207,9.38-3.48l1,2.31c1.4283-.1983,2.8681-.3018,4.31-.31,1.4484.0048,2.8948.105,4.33.3l1-2.31c3.4152.1679,6.6935,1.3947,9.38,3.51,3.0506,6.0542,4.6883,12.7214,4.79,19.5,0,0-2.8,4.79-10.18,5-1.0166-1.2213-1.9711-2.4929-2.86-3.81m6.46-2.9c-3.84,1.9454-7.5555,3.89-12.92,3.89s-9.08-1.9446-12.92-3.89"
-                        />
-                        <path
-                                class="c"
-                                d="m14.497,26.23c0-1.8502,1.4998-3.35,3.35-3.35s3.35,1.4998,3.35,3.35"
-                        />
-                        <path
-                                class="c"
-                                d="m26.803,26.23c0-1.8502,1.4998-3.35,3.35-3.35s3.35,1.4998,3.35,3.35"
-                        />
-                    </svg>
+                    <svg width="30" class="discord" height="30" viewBox="0 0 48 48" id="b" xmlns="http://www.w3.org/2000/svg"><path class="c" d="m17.59,34.1733c-.89,1.3069-1.8944,2.6152-2.91,3.8267-7.38-.21-10.18-5-10.18-5,.1049-6.7869,1.7496-13.4614,4.81-19.52,2.6902-2.1046,5.9681-3.3207,9.38-3.48l1,2.31c1.4283-.1983,2.8681-.3018,4.31-.31,1.4484.0048,2.8948.105,4.33.3l1-2.31c3.4152.1679,6.6935,1.3947,9.38,3.51,3.0506,6.0542,4.6883,12.7214,4.79,19.5,0,0-2.8,4.79-10.18,5-1.0166-1.2213-1.9711-2.4929-2.86-3.81m6.46-2.9c-3.84,1.9454-7.5555,3.89-12.92,3.89s-9.08-1.9446-12.92-3.89"/><path class="c" d="m14.497,26.23c0-1.8502,1.4998-3.35,3.35-3.35s3.35,1.4998,3.35,3.35"/><path class="c" d="m26.803,26.23c0-1.8502,1.4998-3.35,3.35-3.35s3.35,1.4998,3.35,3.35"/></svg>
                     <div class="light-dc"></div>
                 </button>
                 <button class="card4" id="mailButton">
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            height="24"
-                            class="gmail"
-                            width="24"
-                    >
-                        <path
-                                d="M6 12C6 15.3137 8.68629 18 12 18C14.6124 18 16.8349 16.3304 17.6586 14H12V10H21.8047V14H21.8C20.8734 18.5645 16.8379 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C15.445 2 18.4831 3.742 20.2815 6.39318L17.0039 8.68815C15.9296 7.06812 14.0895 6 12 6C8.68629 6 6 8.68629 6 12Z"
-                        ></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" class="gmail" width="24">
+                        <path d="M6 12C6 15.3137 8.68629 18 12 18C14.6124 18 16.8349 16.3304 17.6586 14H12V10H21.8047V14H21.8C20.8734 18.5645 16.8379 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C15.445 2 18.4831 3.742 20.2815 6.39318L17.0039 8.68815C15.9296 7.06812 14.0895 6 12 6C8.68629 6 6 8.68629 6 12Z"></path>
                     </svg>
-                    <div class="light-gmail"></div>
+                    <div class="light-gmail
+              "></div>
                 </button>
             </div>
         </div>
     </div>
 </div>
-
 <footer>
-    <div class="footer">
-        <div class="footer1">
-            <button class="ui-btn" id="designed">
-                Designed by
-                <span> &nbsp;CaSam </span>
-            </button>
-        </div>
+    <div class="footer" style="position: fixed">
+        <div class="footer1"><button class="ui-btn" id="designed">Designed by
+            <span>
+            &nbsp;CaSam
+          </span>
+        </button></div>
         <div class="footer2imp">
+            <ul sec:authorize="!isAuthenticated()">
+                <li>
+                    <button
+                            class="redirecttologinButton"
+                            data-text="Awesome"
+                            id="redirecttologinButton"
+                            onclick="window.location.href='@{/login}'"
+                    >
+                <span class="actual-text"
+                >&nbsp;LOGIN&nbsp;or&nbsp;SIGNUP&nbsp;</span
+                >
+                        <span aria-hidden="true" class="hover-text"
+                        >&nbsp;LOGIN&nbsp;or&nbsp;SIGNUP&nbsp;</span
+                        >
+                    </button>
+                </li>
+            </ul>
         </div>
         <div class="footer3-display">
-            <button
-                    class="footerDisplayButton"
-                    id="footerDisplay"
-                    onclick="socialToggle()"
-            >
+            <button class="footerDisplayButton" id="footerDisplay" onclick="socialToggle()">
                 Click me for Social
                 <div class="star-1">
                     <svg
@@ -584,6 +447,7 @@
                     </svg>
                 </div>
             </button>
+
         </div>
     </div>
 </footer>

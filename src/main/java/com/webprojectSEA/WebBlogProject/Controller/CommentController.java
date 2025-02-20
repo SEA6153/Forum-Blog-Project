@@ -1,16 +1,17 @@
 package com.webprojectSEA.WebBlogProject.Controller;
 
+import com.webprojectSEA.WebBlogProject.Model.Category;
+import com.webprojectSEA.WebBlogProject.Model.Post;
+import com.webprojectSEA.WebBlogProject.Model.PostComment;
+import com.webprojectSEA.WebBlogProject.Model.UserAccount;
+import com.webprojectSEA.WebBlogProject.Repostories.UserAccountRepository;
 import com.webprojectSEA.WebBlogProject.Services.AWSServices.AwsS3Service;
 import com.webprojectSEA.WebBlogProject.Services.AuthenticationService.AuthenticationServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.CommentServices.CommentServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.PostService.PostServiceImpl;
 import com.webprojectSEA.WebBlogProject.Services.UserServices.UserAccountServiceImpl;
-import com.webprojectSEA.WebBlogProject.Model.Category;
-import com.webprojectSEA.WebBlogProject.Model.Post;
-import com.webprojectSEA.WebBlogProject.Model.PostComment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,14 +37,16 @@ public class CommentController {
     private final PostServiceImpl postService;
     private final UserAccountServiceImpl userAccountService;
     private final AuthenticationServiceImpl authenticationService;
+    private final UserAccountRepository userAccountRepository;
 
-    public CommentController(CommentServiceImpl commentService, AwsS3Service awsS3Service, LoginController loginController, PostServiceImpl postService, UserAccountServiceImpl userAccountService, AuthenticationServiceImpl authenticationService) {
+    public CommentController(CommentServiceImpl commentService, AwsS3Service awsS3Service, LoginController loginController, PostServiceImpl postService, UserAccountServiceImpl userAccountService, AuthenticationServiceImpl authenticationService, UserAccountRepository userAccountRepository) {
         this.commentService = commentService;
         this.awsS3Service = awsS3Service;
         this.loginController = loginController;
         this.postService = postService;
         this.userAccountService = userAccountService;
         this.authenticationService = authenticationService;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @GetMapping("my/comments")
@@ -86,6 +89,15 @@ public class CommentController {
             optionalPost.ifPresent(post -> comment.setPostTitle(post.getTitle()));
         }
 
+        if (authentication != null && authentication.isAuthenticated()) {
+            String currentUsername = authentication.getName();
+            UserAccount userAccount = userAccountRepository.findByEmail(currentUsername).orElse(null);
+            model.addAttribute("userAccount", userAccount);
+        }
+
+
+
+
         model.addAttribute("userComments", postComments);
         model.addAttribute("userAccountId", loggedInUserId);
         model.addAttribute("isLoggedIn", true);
@@ -98,6 +110,8 @@ public class CommentController {
         return "my_comments";
     }
 
+
+
     @PostMapping("/posts/{postId}/comments")
     @PreAuthorize("isAuthenticated()")
     public String addComment(@PathVariable Long postId,
@@ -106,7 +120,6 @@ public class CommentController {
                              Authentication authentication,
                              RedirectAttributes redirectAttributes) {
         String username = authentication.getName();
-        String email = ((UserDetails) authentication.getPrincipal()).getUsername();
         Long loggedInUserId = loginController.getLoggedInUserId(authentication);
         String photoUrl = null;
 
@@ -125,9 +138,10 @@ public class CommentController {
             }
         }
 
-        commentService.addComment(postId, username, email, text, photoUrl, loggedInUserId);
+        commentService.addComment(postId, username, text, photoUrl, loggedInUserId);
         return "redirect:/posts/" + postId;
     }
+
 
     @PostMapping("/posts/{postId}/comments/{commentId}/edit")
     @PreAuthorize("isAuthenticated()")
@@ -161,6 +175,7 @@ public class CommentController {
 
         return "redirect:/posts/" + postId;
     }
+
 
 
     @PostMapping("/posts/{postId}/comments/{commentId}/delete")

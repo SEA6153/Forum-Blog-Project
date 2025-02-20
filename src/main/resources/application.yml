@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: Web-BlogProject
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/webProjectSEA
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+    properties:
+      hibernate:
+        format_sql: true
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  port: 3011
+
+security:
+  basic:
+    enabled: false
+
+aws:
+  accessKeyId: AKIATCKAS3K3KRJNHMH3
+  secretAccessKey: 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
+  region: eu-central-1
+  bucketName: forumprojectbucket
+
+file:
+  upload-dir: ${user.home}/web-blog-project/uploads

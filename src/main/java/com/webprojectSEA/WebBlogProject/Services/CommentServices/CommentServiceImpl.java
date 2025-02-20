@@ -56,9 +56,9 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public void addComment(Long postId, String username, String email, String text, String photoUrl, Long userId ) {
+    public void addComment(Long postId, String email, String text, String photoUrl, Long userId ) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found!"));
-        UserAccount userAccount = userRepository.findByNicknameOrEmail(username, email).orElseThrow(() -> new RuntimeException("User not found!"));
+        UserAccount userAccount = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found!"));
         UserAccount userAccountId = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));;
         PostComment postComment = new PostComment();
         postComment.setId(userAccountId.getId());

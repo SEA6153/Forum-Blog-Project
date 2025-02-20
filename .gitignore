@@ -31,3 +31,17 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment Variables ###
+.env
+.env.local
+application-local.properties
+application-local.yml
+
+### Upload Directory ###
+web-blog-project/
+upload.dir/
+
+### OS specific ###
+.DS_Store
+Thumbs.db
