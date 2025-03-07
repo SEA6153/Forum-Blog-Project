@@ -19,6 +19,9 @@ public interface UserAccountService {
     public boolean unlockAccountTimeExpired(UserAccount userAccount);
     public Optional<UserAccount> findByUsernameOrEmail(String identifier);
     public UserAccount ensureRoles(UserAccount userAccount);
+    public void sendVerificationCode(UserAccount userAccount);
+    public boolean verify(String verificationCode);
+    public UserAccount findByEmail(String email);
 
     UserAccount getUserByUsername(String username);
 }

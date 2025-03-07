@@ -1,4 +1,3 @@
-
 //DEFINE POSTING PROPERTIES
 
 package com.webprojectSEA.WebBlogProject.Model;
@@ -34,6 +33,8 @@ public class Post {
     private int likeCount;
 
     private int dislikeCount;
+
+    private int commentCount;
 
     private LocalDateTime createdAt;
 

@@ -16,6 +16,7 @@ public interface UserAccountRepository  extends JpaRepository<UserAccount, Long>
     Optional<UserAccount> findByEmail(String email);
     Optional<UserAccount> findByNickname(String nickname);
     List<UserAccount> findByActive(boolean isEnabled);
+    Optional<UserAccount> findByVerificationCode(String verificationCode);
 
     @Query("update UserAccount u set u.failedAttempt=?1 where u.nickname=?2")
     @Modifying

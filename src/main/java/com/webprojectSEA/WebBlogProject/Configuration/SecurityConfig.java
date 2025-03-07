@@ -25,7 +25,9 @@ public class SecurityConfig {
             "/css/**",
             "/posts",
             "/img/**",
-            "/home"
+            "/home",
+            "/verify-email",
+            "/resend-verification"
     };
 
     private final UserAccountDetailsServiceImpl userDetailsService;

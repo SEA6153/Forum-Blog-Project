@@ -2,6 +2,34 @@ spring:
   application:
     name: Web-BlogProject
 
+  # E-posta Yapılandırması
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    # Gmail hesabınızı ve uygulama şifrenizi aşağıya girin
+    # ÖNEMLİ: Uygulama şifresi oluşturmak için aşağıdaki adımları izleyin:
+    # 1. Google hesabınızda 2 adımlı doğrulamayı etkinleştirin: https://myaccount.google.com/security
+    # 2. "Uygulama Şifreleri" sayfasına gidin: https://myaccount.google.com/apppasswords
+    # 3. "Uygulama seçin" > "Diğer (Özel ad)" > "Spring Mail" yazın
+    # 4. "Oluştur" düğmesine tıklayın ve verilen 16 karakterlik şifreyi kopyalayın
+    # 5. Şifreyi aşağıya boşluksuz olarak yapıştırın (veya boşluklarla da çalışabilir)
+    username: seaforumpage@gmail.com  # Gmail adresinizi buraya yazın
+    password: nbltveaxvdyapyqs   # Uygulama şifrenizi buraya yazın (boşluklar olmadan)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          timeout: 5000
+          writetimeout: 5000
+          # SSL/TLS güvenliği için ek ayarlar
+          ssl:
+            trust: smtp.gmail.com
+          socketFactory:
+            port: 587
+            class: javax.net.ssl.SSLSocketFactory
+
   datasource:
     url: jdbc:postgresql://localhost:5433/webProjectSEA
     username: postgres
@@ -17,7 +45,7 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
 
   thymeleaf:
     prefix: classpath:/templates/

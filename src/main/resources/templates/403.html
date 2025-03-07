@@ -1,29 +1,44 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width initial-scale=1">
-    <title>Blog :: 403</title>
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 - Forbidden</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .error-container {
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #d32f2f;
+            font-size: 48px;
+            margin: 0;
+        }
+        p {
+            color: #666;
+            margin: 20px 0;
+        }
+        a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1 class="not403found">-----403----- </br>  ------NOT PERMISSON------</h1>
-</div>
-
+    <div class="error-container">
+        <h1>403</h1>
+        <p>Erişim Reddedildi</p>
+        <p>Bu sayfaya erişim yetkiniz bulunmamaktadır.</p>
+        <a href="/">Ana Sayfaya Dön</a>
+    </div>
 </body>
-
-<style>
-    .container{
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
-
-    .not404found{
-        color: red;
-        font-size: x-large;
-    }
-</style>
 </html>

@@ -22,7 +22,6 @@ public enum Roles {
 
     @Override
     public String toString() {
-        return "Role: "
-                 + authorityRoles;
+        return authorityRoles;
     }
 }

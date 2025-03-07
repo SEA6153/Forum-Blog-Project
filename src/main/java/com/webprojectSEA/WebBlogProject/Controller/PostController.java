@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class PostController {
@@ -60,6 +61,41 @@ public class PostController {
                     .orElseThrow(() -> new UsernameNotFoundException("Wrong Username or E-mail"));
             model.addAttribute("userAccount", userAccount);
         }
+
+        // Tüm gönderileri al
+        List<Post> allPosts = postServiceImpl.getAll();
+
+        if (allPosts != null && !allPosts.isEmpty()) {
+            // En çok beğenilen gönderiler
+            List<Post> mostLikedPosts = allPosts.stream()
+                    .filter(post -> post.getLikeCount() > 0)
+                    .sorted((p1, p2) -> Integer.compare(p2.getLikeCount(), p1.getLikeCount()))
+                    .limit(5)
+                    .collect(Collectors.toList());
+
+            // En çok yorum alan gönderiler
+            List<Post> mostCommentedPosts = allPosts.stream()
+                    .filter(post -> post.getComments() != null && !post.getComments().isEmpty())
+                    .sorted((p1, p2) -> Integer.compare(p2.getComments().size(), p1.getComments().size()))
+                    .limit(5)
+                    .collect(Collectors.toList());
+
+            // Son eklenen gönderiler
+            List<Post> recentPosts = allPosts.stream()
+                    .sorted((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()))
+                    .limit(5)
+                    .collect(Collectors.toList());
+
+            model.addAttribute("mostLikedPosts", mostLikedPosts);
+            model.addAttribute("mostCommentedPosts", mostCommentedPosts);
+            model.addAttribute("recentPosts", recentPosts);
+        } else {
+            model.addAttribute("mostLikedPosts", List.of());
+            model.addAttribute("mostCommentedPosts", List.of());
+            model.addAttribute("recentPosts", List.of());
+        }
+
+        model.addAttribute("categories", Category.values());
         return "home";
     }
 
