@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doğrulama Kodu - Forum Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/verification.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/home" class="logo-link">
+                    <img th:src="@{/img/seaLogo.png}" alt="SEA Logo" class="logo">
+                </a>
+                <div class="nav-links">
+                    <a href="/home" class="nav-link">Ana Sayfa</a>
+                    <a href="/posts" class="nav-link">Forum</a>
+                    <a href="/blog" class="nav-link">Blog</a>
+                    <a href="/about" class="nav-link">Hakkında</a>
+                </div>
+                <div class="theme-switch">
+                    <button class="theme-toggle" id="theme-toggle" title="Tema değiştir">
+                        <i class="fas fa-sun light-icon"></i>
+                        <i class="fas fa-moon dark-icon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="verification-container">
+            <div class="verification-card">
+                <div class="verification-header">
+                    <h1>E-posta Doğrulama</h1>
+                    <p>E-posta adresinize gönderilen 6 haneli doğrulama kodunu girin.</p>
+                </div>
+
+                <div th:if="${successMessage}" class="alert alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    <span th:text="${successMessage}"></span>
+                </div>
+                
+                <div th:if="${errorMessage}" class="alert alert-error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:text="${errorMessage}"></span>
+                </div>
+
+                <form th:action="@{/verify-email}" method="post" id="verificationForm">
+                    <input type="hidden" name="email" th:value="${email}">
+                    <input type="hidden" name="verificationCode" id="verificationCodeHidden">
+                    
+                    <div class="code-input-container">
+                        <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                    </div>
+
+                    <button type="submit" class="verify-button">
+                        <i class="fas fa-check-circle"></i>
+                        Doğrula
+                    </button>
+                </form>
+
+                <div class="countdown" id="countdown">Yeni kod isteyebilmek için kalan süre: <span id="timer">60</span> saniye</div>
+                
+                <form th:action="@{/resend-verification}" method="post">
+                    <input type="hidden" name="email" th:value="${email}">
+                    <button type="submit" class="resend-button" id="resendButton" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                        Yeni Kod Gönder
+                    </button>
+                </form>
+                
+                <p class="info-text">
+                    <i class="fas fa-info-circle"></i>
+                    Doğrulama kodunu almadıysanız, spam klasörünüzü kontrol edin veya yeni bir kod isteyin.
+                </p>
+                
+                <div class="register-link">
+                    <p>Giriş sayfasına dönmek için</p>
+                    <a href="/login" class="register-button">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Giriş Yap
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="social-links">
+                        <a href="https://twitter.com" target="_blank" class="social-link">
+                            <i class="fab fa-twitter fa-2x"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" class="social-link">
+                            <i class="fab fa-facebook fa-2x"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" class="social-link">
+                            <i class="fab fa-instagram fa-2x"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" class="social-link">
+                            <i class="fab fa-linkedin fa-2x"></i>
+                        </a>
+                        <a href="https://github.com" target="_blank" class="social-link">
+                            <i class="fab fa-github fa-2x"></i>
+                        </a>
+                    </div>
+                    <div class="made-by">
+                        <span>Made by</span>
+                        <span class="sea-text">SEA</span>
+                    </div>
+                </div>
+                
+                <div class="copyright">
+                    <p>&copy; 2025 Forum Platform. Tüm hakları saklıdır.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tema değiştirme işlevi
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            body.setAttribute('data-theme', currentTheme);
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Doğrulama kodu girişi işlevi
+        const codeInputs = document.querySelectorAll('.code-input');
+        const form = document.getElementById('verificationForm');
+        const hiddenInput = document.getElementById('verificationCodeHidden');
+        
+        // Her input alanına otomatik odaklanma ve bir sonraki alana geçme
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('keyup', (e) => {
+                // Sayısal değer kontrolü
+                if (!/^[0-9]$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+                    input.value = '';
+                    return;
+                }
+                
+                // Bir sonraki input alanına geçme
+                if (input.value && index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+                
+                // Tüm kodları birleştirme
+                updateHiddenInput();
+            });
+            
+            // Backspace tuşu ile önceki alana geçme
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+            });
+            
+            // Yapıştırma işlemi
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pasteData = e.clipboardData.getData('text').trim();
+                
+                // 6 haneli kod kontrolü
+                if (/^\d{6}$/.test(pasteData)) {
+                    // Her bir rakamı ilgili input alanına yerleştirme
+                    codeInputs.forEach((input, i) => {
+                        input.value = pasteData[i] || '';
+                    });
+                    
+                    // Son alana odaklanma
+                    codeInputs[codeInputs.length - 1].focus();
+                    
+                    // Gizli input'u güncelleme
+                    updateHiddenInput();
+                }
+            });
+        });
+        
+        // Gizli input'u güncelleme fonksiyonu
+        function updateHiddenInput() {
+            const code = Array.from(codeInputs).map(input => input.value).join('');
+            hiddenInput.value = code;
+        }
+        
+        // Form gönderilmeden önce kontrol
+        form.addEventListener('submit', (e) => {
+            const code = hiddenInput.value;
+            
+            // 6 haneli kod kontrolü
+            if (code.length !== 6 || !/^\d{6}$/.test(code)) {
+                e.preventDefault();
+                alert('Lütfen 6 haneli doğrulama kodunu eksiksiz girin.');
+            }
+        });
+        
+        // İlk input alanına otomatik odaklanma
+        window.addEventListener('load', () => {
+            codeInputs[0].focus();
+        });
+
+        // Geri sayım işlevi
+        let timeLeft = 60;
+        const timerElement = document.getElementById('timer');
+        const resendButton = document.getElementById('resendButton');
+        
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                resendButton.disabled = false;
+                document.getElementById('countdown').style.display = 'none';
+            } else {
+                timerElement.textContent = timeLeft;
+                timeLeft -= 1;
+            }
+        }
+        
+        const timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+</body>
+</html> 
